@@ -7,7 +7,6 @@ import { NOTE_NAMES } from '../lib/pitch';
 import { paramDefs, pFmt, pNorm, presetInfo, presetList, pVal } from '../lib/presets';
 import * as A from '../state/actions';
 import { autoDisplay, isAutomated, paramMenu } from '../state/automation';
-import type { AutoTarget } from '../api/types';
 import { commit, Gesture, wheelEdit } from '../state/edit';
 import { findFx, insName, plain, S } from '../state/store';
 import { onFxFrame, tele } from '../state/telemetry';

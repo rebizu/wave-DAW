@@ -10,4 +10,4 @@ publish.workspace = true
 wave-engine.workspace = true
 realfft.workspace = true
 parking_lot.workspace = true
-ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "download-binaries", "copy-dylibs", "tls-native", "api-20"] }
+ort = { version = "=2.0.0-rc.15", default-features = false, features = ["std", "download-binaries", "copy-dylibs", "tls-rustls", "api-20"] }
