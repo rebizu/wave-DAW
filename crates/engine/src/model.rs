@@ -548,6 +548,10 @@ pub enum AutoTarget {
     Synth { chan_id: Id, param: String },
     /// A WAVE Keys channel's `release` (ms, logarithmic) or `dynamics` (%).
     Keys { chan_id: Id, param: String },
+    /// A hosted VST3 parameter (`param_id` is the plugin's own id, as
+    /// `vst3_params` reports it). The envelope value is the plugin's
+    /// normalized 0..1.
+    Plugin { fx_id: Id, param_id: u32 },
     /// An audio clip's own gain (−24..+12 dB) and pan.
     ClipGain { id: Id },
     ClipPan { id: Id },

@@ -38,6 +38,9 @@ impl PluginFactory for Factory {
         let h = self.0.handles.lock().get(&fx_id).cloned()?;
         h.get_state().ok().map(|b| base64::engine::general_purpose::STANDARD.encode(b))
     }
+    fn has_plugin_param(&self, fx_id: Id, param_id: u32) -> bool {
+        self.0.params(fx_id).ok().is_some_and(|ps| ps.iter().any(|p| p.id == param_id))
+    }
 }
 
 impl Plugins {

@@ -888,6 +888,14 @@ impl Vst3Effect {
         let result = unsafe { self.processor.process(&mut data) };
         self.continuous_samples += frames as i64;
         if result == kResultOk {
+            if std::env::var_os("WAVE_DIAG").is_some() {
+                let calls = self.shared.counters.ok_calls.fetch_add(1, Ordering::Relaxed);
+                if calls < 30 {
+                    let outp = self.io.main_out[0][..frames].iter().fold(0f32, |a, v| a.max(v.abs()));
+                    let nan = self.io.main_out[0][..frames].iter().filter(|v| v.is_nan()).count();
+                    eprintln!("[diag-vst3] call {calls} frames {frames} out_peak {outp:.4} nan {nan} this {:p}", self as *const _);
+                }
+            }
             l.copy_from_slice(&self.io.main_out[0][..frames]);
             r.copy_from_slice(&self.io.main_out[1][..frames]);
         } else {
@@ -978,6 +986,16 @@ impl Processor for Vst3Effect {
             let (l_chunk, r_chunk) = (&mut l[done..done + chunk], &mut r[done..done + chunk]);
             self.run_block(l_chunk, r_chunk, ctx, done);
             done += chunk;
+        }
+    }
+
+    fn set_plugin_param(&mut self, param_id: u32, normalized: f32) {
+        let v = f64::from(normalized);
+        // the mailbox is the same lock-free path `set_param` uses: atomics only,
+        // drained by the next `run_block`. Automation values are already
+        // normalized 0..1; clamp finite strays, drop NaN.
+        if v.is_finite() {
+            self.shared.inbox.post(param_id, v.clamp(0.0, 1.0));
         }
     }
 }

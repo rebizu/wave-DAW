@@ -190,6 +190,9 @@ wave vst3                       # installed VST3 effects (cached scan; --rescan)
 wave vst3-add --insert 2 --path "C:\…\Pro-Q 3.vst3" --cid 72C4DB…
 wave vst3-params --fx 1210 --query freq
 wave vst3-set --fx 1210 --id 42 --value 0.3
+wave auto-add --fx 1210 --param 42 --points "0:0.2,8:0.8" --name "Reverb decay"
+                # automate a hosted plugin parameter: an envelope plus the
+                # playlist clip that plays it; ids come from context.nextId
 ```
 
 ## Several apps open

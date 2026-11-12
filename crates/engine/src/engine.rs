@@ -32,6 +32,12 @@ pub trait PluginFactory: Send + Sync {
     fn state(&self, _fx_id: Id) -> Option<String> {
         None
     }
+    /// Whether hosted plugin `fx_id` currently lists parameter `param_id`.
+    /// Automation targets (`AutoTarget::Plugin`) are validated against this at
+    /// `apply` time, so a stale or unknown id is an error, not a dead envelope.
+    fn has_plugin_param(&self, _fx_id: Id, _param_id: u32) -> bool {
+        false
+    }
 }
 
 pub struct NoPlugins;
@@ -459,6 +465,20 @@ impl Engine {
             }
         }
         let before = c.project.clone();
+        // plugin automation targets are validated here, not in `ops::apply_all`:
+        // whether a parameter id exists is knowledge the plugin factory holds
+        for op in ops {
+            if let Op::PutAutomation { automation } = op {
+                if let AutoTarget::Plugin { fx_id, param_id } = &automation.target {
+                    let in_project = c.project.find_fx(*fx_id).is_some_and(|(_, f)| f.kind == FxKind::Vst3);
+                    if !in_project || !self.factory.has_plugin_param(*fx_id, *param_id) {
+                        return Err(EngineError::Msg(format!(
+                            "effect {fx_id} has no VST3 parameter {param_id} to automate"
+                        )));
+                    }
+                }
+            }
+        }
         let d = ops::apply_all(&mut c.project, ops)?;
         if c.project == before {
             return Ok(c.revision);
@@ -2297,6 +2317,10 @@ fn resolve_target(p: &Project, t: &AutoTarget) -> Option<TargetRt> {
                 "dynamics" => TargetRt::KeysDynamics(i),
                 _ => return None,
             }
+        }
+        AutoTarget::Plugin { fx_id, param_id } => {
+            p.find_fx(*fx_id).filter(|(_, f)| f.kind == FxKind::Vst3)?;
+            TargetRt::PluginParam { fx: *fx_id, param_id: *param_id }
         }
         // the clip id for now: `build_timeline` turns it into the clip's index once sorted
         AutoTarget::ClipGain { id } => TargetRt::ClipGain(p.clips.iter().find(|c| c.id == *id && c.kind == ClipKind::Audio)?.id as usize),

@@ -74,6 +74,8 @@ PLUGINS
   vst3-add --insert ID --path P --cid C    put a VST3 on an insert
   vst3-params --fx ID [--query TEXT]       parameters of a VST3 instance
   vst3-set --fx ID --id PARAM --value 0..1
+  auto-add --fx ID --param ID [--points "0:0.2,4:0.8" | --value V] [--track N --name TEXT]
+                                           automate a hosted plugin parameter (adds the playlist clip too)
 
   call <command> [--args JSON]             raw request (see `catalog`)
   --pretty                                 indent JSON output
@@ -324,6 +326,39 @@ fn run(cmd: &str, a: &Args) -> Result<Value, Fail> {
         "vst3-add" => send(a, "vst3_add", json!({"insertId": a.num("insert").map_err(u)?.ok_or_else(|| u("missing --insert".into()))? as u64, "path": a.need("path").map_err(u)?, "cid": a.need("cid").map_err(u)?})),
         "vst3-params" => send(a, "vst3_params", json!({"fxId": a.num("fx").map_err(u)?.ok_or_else(|| u("missing --fx".into()))? as u64, "query": a.get("query")})),
         "vst3-set" => send(a, "vst3_set_param", json!({"fxId": a.num("fx").map_err(u)?.ok_or_else(|| u("missing --fx".into()))? as u64, "id": a.num("id").map_err(u)?.ok_or_else(|| u("missing --id".into()))? as u64, "value": a.num("value").map_err(u)?.ok_or_else(|| u("missing --value".into()))?})),
+        "auto-add" => {
+            // an automation envelope on a hosted VST3 parameter, plus the playlist clip that plays it
+            let fx = a.num("fx").map_err(u)?.ok_or_else(|| u("missing --fx".into()))? as u64;
+            let param = a.num("param").map_err(u)?.ok_or_else(|| u("missing --param".into()))? as u64;
+            let mut points: Vec<Value> = vec![];
+            if let Some(p) = a.get("points") {
+                for pair in p.split(',') {
+                    let (t, v) = pair.split_once(':').ok_or_else(|| u("--points is t:v pairs, e.g. 0:0.2,4:0.8".into()))?;
+                    let t: f64 = t.trim().parse().map_err(|_| u(format!("bad time `{t}`")))?;
+                    let v: f64 = v.trim().parse().map_err(|_| u(format!("bad value `{v}`")))?;
+                    if !(0.0..=1.0).contains(&v) {
+                        return Err(u(format!("value {v} outside 0..1")));
+                    }
+                    points.push(json!({"t": t, "v": v}));
+                }
+            } else {
+                let v = a.num("value").map_err(u)?.ok_or_else(|| u("needs --points \"t:v,...\" or --value 0..1".into()))?;
+                if !(0.0..=1.0).contains(&v) {
+                    return Err(u(format!("value {v} outside 0..1")));
+                }
+                points.push(json!({"t": 0.0, "v": v}));
+            }
+            let ctx = send(a, "context", json!({}))?;
+            let next = ctx.get("nextId").and_then(Value::as_u64).ok_or_else(|| u("no nextId in context".into()))?;
+            let (auto_id, clip_id) = (next, next + 1);
+            let track = a.num("track").map_err(u)?.unwrap_or(0.0) as u64;
+            let name = a.get("name").unwrap_or("Automation").to_string();
+            let len = points.iter().filter_map(|p| p["t"].as_f64()).fold(1.0, f64::max) + 1.0;
+            send(a, "apply", json!({"ops": [
+                {"op": "putAutomation", "automation": {"id": auto_id, "name": name, "color": "#e0a44a", "target": {"kind": "plugin", "fxId": fx, "paramId": param}, "points": points}},
+                {"op": "putClips", "clips": [{"id": clip_id, "track": track, "start": 0.0, "len": len, "offset": 0.0, "kind": "auto", "ref": auto_id, "muted": false, "gain": 0.0, "fadeIn": 0.0, "fadeOut": 0.0, "pan": 0.0, "norm": false, "rev": false}]}
+            ]}))
+        }
         "call" => {
             let c = a.pos.get(1).ok_or_else(|| u("call <command> [--args JSON]".into()))?;
             let args = match a.get("args") {

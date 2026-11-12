@@ -201,7 +201,9 @@ f log 20–20k, g −30..30 dB, q log 0.1–18), `{kind:"mix", fxId}`,
 `{kind:"insertVol"|"insertPan", id}`, `{kind:"trackVol", id}`,
 `{kind:"chanVol"|"chanPan", id}` (Channel Rack channel), `{kind:"synth", chanId, param}`
 (synth catalog id), `{kind:"keys", chanId, param:"release"|"dynamics"}` (release log
-40–3000 ms, dynamics 0–100 %), `{kind:"clipGain"|"clipPan", id}` (an audio clip; gain
+40–3000 ms, dynamics 0–100 %), `{kind:"plugin", fxId, paramId}` (a hosted VST3
+parameter, `paramId` as `vst3_params` reports it; `v` is the plugin's normalised
+0..1; `apply` refuses unknown fx/param pairs), `{kind:"clipGain"|"clipPan", id}` (an audio clip; gain
 −24..+12 dB). `v` is 0..1; log parameters are normalised logarithmically, vol is the
 fader position, pan maps −1..1 to 0..1, choices snap to an option. While playing, the
 engine applies automation every block; channel and clip gain/pan glide across the block,

@@ -378,6 +378,10 @@ pub enum TargetRt {
     ChanPan(usize),
     /// A synth channel's patch parameter (`poly::params` index), glided by the synth.
     Synth { chan: Id, idx: usize, min: f32, max: f32, log: bool, choice: bool },
+    /// A hosted plugin parameter (`fx` is the effect id, `param_id` the
+    /// plugin's own parameter id); the envelope value goes through as the
+    /// plugin's normalized 0..1.
+    PluginParam { fx: Id, param_id: u32 },
     /// WAVE Keys channel (index into `Timeline::chans`): release time, dynamics.
     KeysRelease(usize),
     KeysDynamics(usize),
@@ -1789,6 +1793,13 @@ fn apply_automation(tl: &mut Timeline, g: &mut Graph, synths: &mut crate::poly::
             TargetRt::Mix { fx } => {
                 if let Some(s) = slot(g, fx) {
                     s.mix = v;
+                }
+            }
+            TargetRt::PluginParam { fx, param_id } => {
+                if let Some(s) = slot(g, fx) {
+                    if let Some(p) = s.proc.as_mut() {
+                        p.set_plugin_param(param_id, v.clamp(0.0, 1.0));
+                    }
                 }
             }
             TargetRt::InsVol(i) => {

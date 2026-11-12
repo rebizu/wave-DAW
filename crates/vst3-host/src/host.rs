@@ -710,6 +710,7 @@ impl IBStreamTrait for MemoryStream {
 pub(crate) struct Counters {
     pub(crate) feedback_dropped: AtomicU64,
     pub(crate) process_errors: AtomicU64,
+    pub(crate) ok_calls: AtomicU64,
 }
 
 #[cfg(test)]
