@@ -153,6 +153,16 @@ export class MockBackend implements Backend {
   async getState() { return this.dto(); }
   async applyOps(ops: Op[], opts?: { label?: string; transient?: boolean }) {
     await delay();
+    // like the engine: a plugin automation target must name a parameter the hosted
+    // plugin lists, else it would be a dead envelope
+    for (const op of ops) {
+      if (op.op === 'putAutomation' && op.automation.target.kind === 'plugin') {
+        const { fxId, paramId } = op.automation.target;
+        const fx = this.p.inserts.flatMap(m => m.fx).find(f => f.id === fxId);
+        if (fx?.type !== 'vst3' || !this.vstParams.get(fxId)?.some(q => q.id === paramId))
+          throw new Error(`INVALID_TARGET: effect ${fxId} has no VST3 parameter ${paramId} to automate`);
+      }
+    }
     const prev = this.p;
     this.p = applyAll(this.p, ops); // throws (rejects) on an invalid batch
     // like the engine: no state event per transient batch of a gesture (endGesture reports it)

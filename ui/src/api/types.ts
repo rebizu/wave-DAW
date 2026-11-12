@@ -258,6 +258,8 @@ export type AutoTarget =
   | { kind: 'synth'; chanId: Id; param: string }
   /** A WAVE Keys channel's release (ms, log) or dynamics (%). */
   | { kind: 'keys'; chanId: Id; param: 'release' | 'dynamics' }
+  /** A hosted VST3 parameter (`paramId` as `vst3Params` reports it); values are the plugin's normalized 0..1. */
+  | { kind: 'plugin'; fxId: Id; paramId: number }
   /** An audio clip's own gain (−24..+12 dB, `CLIP_GAIN_DB`) and pan. */
   | { kind: 'clipGain'; id: Id }
   | { kind: 'clipPan'; id: Id };

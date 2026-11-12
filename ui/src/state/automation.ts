@@ -63,12 +63,14 @@ export function autoDisplay(t: AutoTarget): number | null {
   return v == null ? null : denormalize(S.project, S.catalog, t, v);
 }
 
-/** Create an automation clip for `target` at the start marker (or over the loop), 4 bars long. */
-export function automate(target: AutoTarget, color = '#e0a44a') {
+/** Create an automation clip for `target` at the start marker (or over the loop), 4 bars long.
+ * `current` is a hosted plugin parameter's live normalized value (the project does not know it);
+ * `paramLabel` names the parameter ("Decay") for the clip and mixer lane. */
+export function automate(target: AutoTarget, color = '#e0a44a', opts?: { current?: number; paramLabel?: string }) {
   const lp = S.project.loop;
   const start = lp ? lp.a : Math.max(0, U.start), len = lp ? lp.b - lp.a : 16;
-  const name = targetLabel(S.project, S.catalog, target);
-  const r = createAutomationOps(S.project, S.catalog, target, name, color, start, len, allocId);
+  const name = targetLabel(S.project, S.catalog, target, opts?.paramLabel);
+  const r = createAutomationOps(S.project, S.catalog, target, name, color, start, len, allocId, opts?.current);
   commit(r.ops, tl('a.au.label'));
   setU('sel', [r.clipId]);
   say(tl('a.au.created', { name, n: r.track + 1, pos: fmtPos(start) }));
@@ -87,13 +89,14 @@ export function controlMenu(x: number, y: number, label: string, reset: () => vo
   ], 140);
 }
 
-/** The shared right-click menu of an automatable control. */
-export function paramMenu(x: number, y: number, target: AutoTarget, reset: (() => void) | null, color?: string) {
+/** The shared right-click menu of an automatable control. `opts` carries a hosted
+ * plugin parameter's live value and name (see `automate`). */
+export function paramMenu(x: number, y: number, target: AutoTarget, reset: (() => void) | null, color?: string, opts?: { current?: number; paramLabel?: string }) {
   const auto = isAutomated(target);
   const clips = () => S.project.clips.filter(c => c.kind === 'auto' && S.project.automations?.find(a => a.id === c.ref && targetKey(a.target) === targetKey(target)));
   openMenu(x, y, [
-    { t: 'title', label: targetLabel(S.project, S.catalog, target) },
-    { t: 'item', label: tl('a.au.automate'), kbd: S.project.loop ? tl('a.au.loop') : tl('a.au.bars4'), act: () => automate(target, color) },
+    { t: 'title', label: targetLabel(S.project, S.catalog, target, opts?.paramLabel) },
+    { t: 'item', label: tl('a.au.automate'), kbd: S.project.loop ? tl('a.au.loop') : tl('a.au.bars4'), act: () => automate(target, color, opts) },
     ...(auto ? [{ t: 'item' as const, label: tl('a.au.selClips'), act: () => setU('sel', clips().map(c => c.id)) }] : []),
     ...(reset ? [{ t: 'sep' as const }, { t: 'item' as const, label: tl('a.au.reset'), kbd: tl('a.pl.dblClick'), act: reset }] : []),
   ], 140);

@@ -1,6 +1,6 @@
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
 import { be } from '../api/backend';
-import type { Fx, FxKind, Id, ParamDef, Vst3Param } from '../api/types';
+import type { AutoTarget, Fx, FxKind, Id, ParamDef, Vst3Param } from '../api/types';
 import { clamp } from '../lib/format';
 import { lang, t, tName, type TranslationKey } from '../lib/i18n';
 import { NOTE_NAMES } from '../lib/pitch';
@@ -573,11 +573,15 @@ function Vst3Body(props: { fx: Fx }) {
       <div style={{ 'max-height': '320px', overflow: 'auto', 'padding-right': '4px' }}>
         <For each={shown()} fallback={<span class="note">{t('c.fx.noParams')}</span>}>
           {p => (
-            <div class="vparam">
+            <div class="vparam" onContextMenu={e => { e.preventDefault(); e.stopPropagation();
+              paramMenu(e.clientX, e.clientY, { kind: 'plugin', fxId: props.fx.id, paramId: p.id } satisfies AutoTarget, () => set(p.id, p.def), undefined, { current: p.value, paramLabel: p.name });
+            }}>
               <span class="ell" style={{ font: '12px var(--sans)', color: 'var(--fg)' }} title={p.name}>{p.name}</span>
               <input type="range" min="0" max="1" step="0.001" value={p.value} onInput={e => set(p.id, +e.currentTarget.value)}
                 onDblClick={() => set(p.id, p.def)} />
-              <span class="mono ell" style={{ 'font-size': '10px', color: 'var(--fg2)', 'text-align': 'right' }}>{p.display}</span>
+              <span class="mono ell" style={{ 'font-size': '10px', color: 'var(--fg2)', 'text-align': 'right' }} title={isAutomated({ kind: 'plugin', fxId: props.fx.id, paramId: p.id }) ? t('d.ui.knob.auto') : p.display}>
+                <Show when={isAutomated({ kind: 'plugin', fxId: props.fx.id, paramId: p.id })}>● </Show>{p.display}
+              </span>
             </div>
           )}
         </For>

@@ -32,6 +32,7 @@ export function targetKey(t: AutoTarget): string {
     case 'chanPan': return 'cp:' + t.id;
     case 'synth': return 'sy:' + t.chanId + ':' + t.param;
     case 'keys': return 'ky:' + t.chanId + ':' + t.param;
+    case 'plugin': return 'pl:' + t.fxId + ':' + t.paramId;
     case 'clipGain': return 'cg:' + t.id;
     case 'clipPan': return 'cpn:' + t.id;
   }
@@ -49,6 +50,7 @@ function fxOf(p: Project, id: Id) {
 export function normalize(p: Project, cat: Catalog | null, t: AutoTarget, x: number): number {
   switch (t.kind) {
     case 'mix': case 'insertVol': case 'trackVol': case 'chanVol': return c01(x);
+    case 'plugin': return c01(x);
     case 'insertPan': case 'chanPan': case 'clipPan': return c01((x + 1) / 2);
     case 'clipGain': return lin(x, CLIP_GAIN_DB.min, CLIP_GAIN_DB.max);
     case 'keys': return t.param === 'release' ? lg(x, KEYS_RELEASE.min, KEYS_RELEASE.max) : lin(x, KEYS_DYNAMICS.min, KEYS_DYNAMICS.max);
@@ -72,6 +74,7 @@ export function denormalize(p: Project, cat: Catalog | null, t: AutoTarget, v: n
   v = c01(v);
   switch (t.kind) {
     case 'mix': case 'insertVol': case 'trackVol': case 'chanVol': return v;
+    case 'plugin': return v;
     case 'insertPan': case 'chanPan': case 'clipPan': return v * 2 - 1;
     case 'clipGain': return unlin(v, CLIP_GAIN_DB.min, CLIP_GAIN_DB.max);
     case 'keys': return t.param === 'release' ? ex(v, KEYS_RELEASE.min, KEYS_RELEASE.max) : unlin(v, KEYS_DYNAMICS.min, KEYS_DYNAMICS.max);
@@ -95,6 +98,7 @@ export function denormalize(p: Project, cat: Catalog | null, t: AutoTarget, v: n
 /** The control's current (static) value in its own unit, or null if the target is gone. */
 export function readTarget(p: Project, t: AutoTarget): number | null {
   switch (t.kind) {
+    case 'plugin': return null; // lives in the plugin, not the project; the fx window passes it
     case 'mix': return fxOf(p, t.fxId)?.f.mix ?? (fxOf(p, t.fxId) ? 1 : null);
     case 'insertVol': return p.inserts.find(m => m.id === t.id)?.vol ?? null;
     case 'insertPan': return p.inserts.find(m => m.id === t.id)?.pan ?? null;
@@ -185,8 +189,10 @@ export function trackForAutomation(p: Project): { index: number; ops: Op[] } {
  * Ops that create an automation for `target` holding `value` (plain units): the envelope with two
  * points, a clip of `len` beats at `start`, on an empty or new track.
  */
-export function createAutomationOps(p: Project, cat: Catalog | null, target: AutoTarget, name: string, color: string, start: number, len: number, alloc: () => Id): { ops: Op[]; clipId: Id; autoId: Id; track: number } {
-  const cur = readTarget(p, target) ?? (target.kind === 'synth' && cat ? synthParam(cat.synth, target.param)?.def : undefined) ?? 0;
+export function createAutomationOps(p: Project, cat: Catalog | null, target: AutoTarget, name: string, color: string, start: number, len: number, alloc: () => Id, current?: number): { ops: Op[]; clipId: Id; autoId: Id; track: number } {
+  const cur = target.kind === 'plugin'
+    ? current ?? 0
+    : readTarget(p, target) ?? (target.kind === 'synth' && cat ? synthParam(cat.synth, target.param)?.def : undefined) ?? 0;
   const v = normalize(p, cat, target, cur);
   const autoId = alloc();
   const auto: Automation = { id: autoId, name, color, target, points: [{ t: 0, v }, { t: len, v }] };
@@ -205,10 +211,16 @@ export function createAutomationOps(p: Project, cat: Catalog | null, target: Aut
   return { ops, clipId, autoId, track };
 }
 
-/** Human label of a target ("Vocal · EQ · Band 3 Gain"). */
-export function targetLabel(p: Project, cat: Catalog | null, t: AutoTarget): string {
+/** Human label of a target ("Vocal · EQ · Band 3 Gain"). `paramLabel` names a
+ * hosted plugin's parameter (the project does not know plugin parameter names). */
+export function targetLabel(p: Project, cat: Catalog | null, t: AutoTarget, paramLabel?: string): string {
   const insName = (id: Id) => tName(p.inserts.find(m => m.id === id)?.name ?? '?');
   switch (t.kind) {
+    case 'plugin': {
+      const ff = fxOf(p, t.fxId);
+      const pn = paramLabel ?? tl('a.au.pluginParam', { id: String(t.paramId) });
+      return ff ? tName(ff.m.name) + ' · ' + pn : pn;
+    }
     case 'insertVol': return insName(t.id) + ' · ' + tl('a.au.vol');
     case 'insertPan': return insName(t.id) + ' · ' + tl('a.au.pan');
     case 'trackVol': return (p.tracks.find(x => x.id === t.id)?.name ?? '?') + ' · ' + tl('a.au.trackVol');
@@ -246,6 +258,7 @@ export function autoValueText(p: Project, cat: Catalog | null, t: AutoTarget, v:
     case 'mix': return Math.round(x * 100) + '%';
     case 'synth': { const d = cat && synthParam(cat.synth, t.param); return d ? pFmt(d, x) : Math.round(v * 100) + '%'; }
     case 'keys': return t.param === 'release' ? x.toFixed(2) + ' s' : Math.round(x * 100) + '%';
+    case 'plugin': return Math.round(x * 100) + '%';
     case 'fx': {
       const b = parseBandParam(t.param);
       if (b) return b.k === 'f' ? hzText(x) : b.k === 'g' ? dbText(x) : 'Q ' + x.toFixed(2);
