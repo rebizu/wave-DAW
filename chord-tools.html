@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WAVE · Chord tools mock (direction approval)</title>
+<style>
+  :root{
+    --bg:#1b1d20; --panel:#22252a; --panel2:#191b1e; --line:#33373d;
+    --txt:#d7dae0; --dim:#8a8f98; --acc:#ff7a2f; --acc2:#ffb35c;
+    --note:#7ec97a; --notesel:#ffd24a; --scale:#2e3340; --scaleoff:#23262b;
+    --barline:#3d424a;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--txt); font:13px/1.45 "Segoe UI",system-ui,sans-serif; height:100vh; display:flex; flex-direction:column; overflow:hidden;}
+  header{display:flex; align-items:center; gap:14px; padding:8px 14px; background:var(--panel2); border-bottom:1px solid var(--line);}
+  header h1{font-size:14px; font-weight:600; color:var(--acc);}
+  header .sub{color:var(--dim); font-size:11px;}
+  .grp{display:flex; align-items:center; gap:6px;}
+  .grp label{color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.4px;}
+  select,input[type=number],input[type=text]{background:var(--panel); color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:3px 6px; font:12px inherit;}
+  select:focus,input:focus{outline:1px solid var(--acc);}
+  button{background:var(--panel); color:var(--txt); border:1px solid var(--line); border-radius:4px; padding:4px 10px; font:12px inherit; cursor:pointer;}
+  button:hover{border-color:var(--acc); color:var(--acc2);}
+  button.primary{background:var(--acc); border-color:var(--acc); color:#16110c; font-weight:600;}
+  button.primary:hover{background:var(--acc2); color:#16110c;}
+  main{flex:1; display:flex; min-height:0;}
+  aside{width:252px; background:var(--panel2); border-right:1px solid var(--line); padding:12px; overflow-y:auto; display:flex; flex-direction:column; gap:14px;}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:10px;}
+  .card h2{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--acc2); margin-bottom:8px;}
+  .row{display:flex; align-items:center; gap:6px; margin:6px 0;}
+  .row label{width:86px; color:var(--dim); font-size:12px;}
+  .row select,.row input{flex:1; min-width:0;}
+  .modes{display:flex; gap:6px; margin-bottom:8px;}
+  .modes button{flex:1; padding:4px 0;}
+  .modes button.on{background:var(--acc); border-color:var(--acc); color:#16110c; font-weight:600;}
+  .hint{color:var(--dim); font-size:11px; margin-top:6px;}
+  .rollwrap{flex:1; overflow:auto; position:relative; background:var(--scaleoff);}
+  svg{display:block; cursor:crosshair;}
+  footer{display:flex; align-items:center; gap:18px; padding:5px 14px; background:var(--panel2); border-top:1px solid var(--line); color:var(--dim); font-size:12px;}
+  footer b{color:var(--txt); font-weight:600;}
+  .chips{display:flex; flex-wrap:wrap; gap:4px;}
+  .chip{background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:1px 6px; font-size:11px; color:var(--acc2);}
+  kbd{background:var(--panel); border:1px solid var(--line); border-radius:3px; padding:0 5px; font-size:11px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Chord tools — mock</h1>
+  <span class="sub">direction-approval prototype · not the real UI</span>
+  <div class="grp"><label>Key</label><select id="key"></select></div>
+  <div class="grp"><label>Scale</label>
+    <select id="scale">
+      <option value="0">Major</option><option value="1" selected>Natural minor</option>
+      <option value="2">Maj pentatonic</option><option value="3">Min pentatonic</option>
+    </select></div>
+  <div class="grp"><label>BPM</label><input id="bpm" type="number" value="90" min="40" max="220" style="width:56px"></div>
+  <button id="play" class="primary">▶ Play</button>
+  <button id="clear">Clear</button>
+</header>
+<main>
+  <aside>
+    <div class="card">
+      <h2>Stamp</h2>
+      <div class="modes">
+        <button id="mStamp" class="on">Stamp</button>
+        <button id="mSelect">Select</button>
+      </div>
+      <div class="row"><label>Chord type</label>
+        <select id="chordType">
+          <option value="maj">Major</option><option value="min" selected>Minor</option>
+          <option value="dim">Diminished</option><option value="aug">Augmented</option>
+          <option value="sus2">Sus2</option><option value="sus4">Sus4</option>
+          <option value="7">Dominant 7</option><option value="maj7">Major 7</option>
+          <option value="min7">Minor 7</option><option value="9">Dominant 9</option>
+          <option value="add9">Add 9</option><option value="maj9">Major 9</option>
+          <option value="min9">Minor 9</option><option value="6">Major 6</option>
+          <option value="m6">Minor 6</option><option value="dim7">Diminished 7</option>
+          <option value="m7b5">Minor 7 ♭5</option><option value="5">Power 5</option>
+          <option value="single">Single note (for the Chord tool)</option>
+        </select></div>
+      <div class="row"><label>Inversion</label>
+        <select id="inv">
+          <option value="0" selected>Root position</option><option value="1">1st</option>
+          <option value="2">2nd</option><option value="3">3rd</option>
+        </select></div>
+      <div class="hint">Click the grid to stamp the chord, clicked key = root. Right-click deletes a chord.</div>
+    </div>
+    <div class="card">
+      <h2>Tools · Chord (selection)</h2>
+      <div class="row"><label>Harmony</label>
+        <select id="chordVerb">
+          <option value="diatonic" selected>Diatonic (project scale)</option>
+          <option value="maj">Major triad</option><option value="min">Minor triad</option>
+          <option value="7">Dominant 7</option><option value="maj7">Major 7</option>
+          <option value="min7">Minor 7</option>
+        </select></div>
+      <button id="applyChord" style="width:100%">Apply to selection</button>
+      <div class="hint">Switch to <b>Select</b>, drag a rectangle over single notes, then apply. Single notes gain 3rd/5th (±7th).</div>
+    </div>
+    <div class="card">
+      <h2>Tools · Progression</h2>
+      <div class="row"><label>Template</label>
+        <select id="prog">
+          <option value="pop">Pop I–V–vi–IV</option>
+          <option value="pop2">Pop rotation vi–IV–I–V</option>
+          <option value="minloop" selected>Minor loop i–VI–III–VII</option>
+          <option value="trap">Trap i–iv–VI–v</option>
+          <option value="iivI">ii–V–I</option>
+          <option value="doowop">Doo-wop I–vi–IV–V</option>
+          <option value="andalusian">Andalusian i–VII–VI–v</option>
+          <option value="blues">Blues i–iv–v</option>
+          <option value="canon">Canon (8 bars)</option>
+          <option value="chance">Chance (seeded)</option>
+        </select></div>
+      <div class="row"><label>Degrees</label><input id="degrees" type="text" placeholder="0:5:2:6 — overrides template"></div>
+      <div class="row"><label>Bars</label><input id="bars" type="number" value="4" min="1" max="32"></div>
+      <div class="row"><label>Seed</label><input id="seed" type="number" value="2026"><button id="reseed" title="New seed">⟳</button></div>
+      <div class="row"><label style="width:auto"><input id="vl" type="checkbox" checked> Voice-lead (pick inversions)</label></div>
+      <button id="genProg" class="primary" style="width:100%">Generate</button>
+      <div class="hint">Replaces the roll's content. Chords sit on beat 1 of each bar, one chord per bar, 4/4 in the project key. Degrees override templates — the v1 escape hatch (CLI-only via <b>wave notes progression --degrees</b>; this field previews it). Bars hard-capped at 32.</div>
+    </div>
+  </aside>
+  <div class="rollwrap"><svg id="roll"></svg></div>
+</main>
+<footer>
+  <span>Notes <b id="stNotes">0</b></span>
+  <span>Chords <b id="stChords">0</b></span>
+  <div class="chips" id="stChips"></div>
+  <span style="margin-left:auto"><kbd>Space</kbd> play/stop · <kbd>Del</kbd> delete selection</span>
+</footer>
+<script>
+'use strict';
+/* ---------- theory ---------- */
+const NN = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const SCALES = [[0,2,4,5,7,9,11],[0,2,3,5,7,8,10],[0,2,4,7,9],[0,3,5,7,10]];
+const CHORDS = {
+  maj:[0,4,7], min:[0,3,7], dim:[0,3,6], aug:[0,4,8], sus2:[0,2,7], sus4:[0,5,7],
+  7:[0,4,7,10], maj7:[0,4,7,11], min7:[0,3,7,10], 9:[0,4,7,10,14], add9:[0,4,7,14],
+  maj9:[0,4,7,11,14], min9:[0,3,7,10,14], 6:[0,4,7,9], m6:[0,3,7,9],
+  dim7:[0,3,6,9], m7b5:[0,3,6,10], 5:[0,7]
+};
+const CHORD_NAME = {maj:'', min:'m', dim:'°', aug:'+', sus2:'sus2', sus4:'sus4', 7:'7', maj7:'maj7', min7:'m7', 9:'9', add9:'add9', maj9:'maj9', min9:'m9', 6:'6', m6:'m6', dim7:'°7', m7b5:'m7♭5', 5:'5'};
+const DEG = ['I','II','III','IV','V','VI','VII'];
+const TEMPLATES = {
+  pop:[0,4,5,3],           // I V vi IV
+  pop2:[5,3,0,4],          // vi IV I V (pop rotation)
+  minloop:[0,5,2,6],       // i VI III VII
+  trap:[0,3,5,4],          // i iv VI v
+  iivI:[1,4,0],            // ii V I
+  doowop:[0,5,3,4],        // I vi IV V
+  andalusian:[0,6,5,4],    // i VII VI v
+  blues:[0,3,4],           // i iv v
+  canon:[0,4,5,2,3,0,3,4], // 8-bar canon cycle
+  chance:null              // seeded random walk
+};
+function scaleMask(key, scale){ const m = Array(12).fill(false); for(const s of SCALES[scale]) m[(key+s)%12] = true; return m; }
+/* diatonic chord: stack scale degrees d, d+2, d+4 (+d+6) */
+function diatonicChord(scale, deg, seventh){
+  const s = SCALES[scale], n = s.length, out = [];
+  const idx = seventh ? [0,2,4,6] : [0,2,4];
+  for(const i of idx) out.push(s[(deg+i)%n] + 12*Math.floor((deg+i)/n));
+  return out;
+}
+function qualityName(pitches){ // voicing-tolerant, bass-first: the lowest note's pitch class is tried as root first
+  const bass=Math.min(...pitches)%12;
+  const pcs=[...new Set(pitches.map(p=>p%12))];
+  const order=[bass,...pcs.filter(pc=>pc!==bass)];
+  for(const pc of order){
+    const rel=pcs.map(p=>(p-pc+12)%12).sort((a,b)=>a-b).join(',');
+    for(const [tKey, ivArr] of Object.entries(CHORDS)){
+      const tn=[...new Set(ivArr.map(v=>v%12))].sort((a,b)=>a-b).join(',');
+      if(rel===tn) return NN[pc]+CHORD_NAME[tKey];
+    }
+  }
+  return NN[Math.min(...pcs)]+'?';
+}
+/* seeded rng (mock stand-in for the engine's SplitMix64) */
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* ---------- state ---------- */
+const STEPS = 32;               // 8 bars · 4 beats
+const P_LO = 36, P_HI = 83;     // C2..B5
+const CW = 34, CH = 15, LB = 52; // cell w/h, label gutter
+let notes = [];                 // {p, s, len, vel}
+let sel = null;                 // marquee rect {s0,s1,p0,p1}
+let mode = 'stamp';
+let selected = new Set();       // indices into notes
+
+const $ = id => document.getElementById(id);
+const keyEl=$('key'), scaleEl=$('scale');
+NN.forEach((n,i)=>keyEl.insertAdjacentHTML('beforeend',`<option value="${i}">${n}</option>`));
+keyEl.value = 9; // A — matches the demo session
+
+const key = ()=>+keyEl.value, scale = ()=>+scaleEl.value;
+
+/* ---------- svg roll ---------- */
+const roll = $('roll');
+function layout(){
+  const W = LB + STEPS*CW, H = (P_HI-P_LO+1)*CH + 26;
+  roll.setAttribute('width', W); roll.setAttribute('height', H);
+  roll.setAttribute('viewBox', `0 0 ${W} ${H}`);
+}
+function xOf(s){ return LB + s*CW; }
+function yOf(p){ return (P_HI-p)*CH + 26; }
+function pAt(y){ return P_HI - Math.floor((y-26)/CH); }
+function sAt(x){ return Math.max(0, Math.min(STEPS-1, Math.floor((x-LB)/CW))); }
+
+function draw(){
+  layout();
+  const m = scaleMask(key(), scale());
+  let bg = '';
+  for(let p=P_LO;p<=P_HI;p++){
+    const black = [1,3,6,8,10].includes(p%12);
+    for(let s=0;s<STEPS;s++){
+      const on = m[p%12];
+      bg += `<rect x="${xOf(s)}" y="${yOf(p)}" width="${CW}" height="${CH}" fill="${on?(black?'#313847':'#2a3140'):(black?'#20232a':'#24272e')}" stroke="#1b1d20" stroke-width="1"/>`;
+    }
+  }
+  // bar/beat lines + ruler
+  let ruler = `<rect x="0" y="0" width="${LB+STEPS*CW}" height="26" fill="#191b1e"/>`;
+  let labels = '';
+  for(let s=0;s<=STEPS;s++){
+    const bar = s%4===0;
+    ruler += `<line x1="${xOf(s)}" y1="0" x2="${xOf(s)}" y2="${(P_HI-P_LO+1)*CH+26}" stroke="${bar?'var(--barline)':'#262a30'}" stroke-width="1"/>`;
+    if(bar) labels += `<text x="${xOf(s)+5}" y="17" fill="#8a8f98" font-size="11" font-family="inherit">bar ${s/4+1}</text>`;
+  }
+  for(let p=P_LO;p<=P_HI;p++){
+    const nm = NN[p%12], oct = Math.floor(p/12)-1;
+    labels += `<text x="6" y="${yOf(p)+11}" fill="${m[p%12]?'#c7cbd2':'#565b64'}" font-size="10" font-family="inherit">${nm}${oct}</text>`;
+  }
+  // notes
+  let ns='';
+  notes.forEach((n,i)=>{
+    const isSel = selected.has(i);
+    ns += `<rect x="${xOf(n.s)+1}" y="${yOf(n.p)+1}" width="${n.len*CW-2}" height="${CH-2}" rx="2.5" fill="${isSel?'var(--notesel)':'var(--note)'}" opacity="0.92"/>`;
+  });
+  // marquee
+  let mq='';
+  if(sel){
+    const x=Math.min(xOf(sel.s0),xOf(sel.s1)), y=Math.min(yOf(sel.p0),yOf(sel.p1));
+    mq = `<rect x="${x}" y="${y}" width="${Math.abs(xOf(sel.s1)-xOf(sel.s0))}" height="${Math.abs(yOf(sel.p1)-yOf(sel.p0))}" fill="rgba(255,122,47,.12)" stroke="var(--acc)" stroke-dasharray="4 3"/>`;
+  }
+  roll.innerHTML = bg + ruler + labels + ns + mq;
+  status();
+}
+/* chord label chips in status bar */
+function chordGroups(){
+  const byStep = new Map();
+  notes.forEach(n=>{ if(!byStep.has(n.s)) byStep.set(n.s,[]); byStep.get(n.s).push(n.p); });
+  const out=[];
+  for(const [s,ps] of [...byStep.entries()].sort((a,b)=>a[0]-b[0])){
+    ps.sort((a,b)=>a-b);
+    if(ps.length>1) out.push({s, name: qualityName(ps), root:ps[0]});
+  }
+  return out;
+}
+function status(){
+  $('stNotes').textContent = notes.length;
+  const gs = chordGroups();
+  $('stChords').textContent = gs.length;
+  $('stChips').innerHTML = gs.map(g=>`<span class="chip">bar ${Math.floor(g.s/4)+1} · ${g.name}</span>`).join('');
+}
+
+/* ---------- audio ---------- */
+let ac=null;
+function ctx(){ if(!ac) ac = new (window.AudioContext||window.webkitAudioContext)(); return ac; }
+function pluck(pitch, t, dur, vel=0.5){
+  const a=ctx(), o=a.createOscillator(), o2=a.createOscillator(), g=a.createGain(), f=a.createBiquadFilter();
+  o.type='triangle'; o2.type='sine'; o.frequency.value=440*Math.pow(2,(pitch-69)/12); o2.frequency.value=o.frequency.value/2;
+  f.type='lowpass'; f.frequency.value=2200;
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vel*0.16,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o.connect(f); o2.connect(f); f.connect(g); g.connect(a.destination);
+  o.start(t); o2.start(t); o.stop(t+dur+0.05); o2.stop(t+dur+0.05);
+}
+function playChord(pitches, dur=0.8){ const t=ctx().currentTime+0.02; pitches.forEach(p=>pluck(p,t,dur,0.6)); }
+
+/* transport */
+let playing=false, timer=null, nextStep=0, nextT=0;
+function tick(){
+  const a=ctx(), spb=60/+$('bpm').value, stepDur=spb; // 1 beat per step column here (4/4, quarter grid)
+  while(nextT < a.currentTime+0.12){
+    const step = nextStep % STEPS;
+    notes.forEach(n=>{ if(step>=n.s && step<n.s+n.len && (step===n.s || (step-n.s)%4===0)) pluck(n.p, nextT, stepDur*0.95, 0.4); });
+    // re-trigger held chord each beat for a pulse feel
+    nextT+=stepDur; nextStep++;
+  }
+}
+$('play').onclick = ()=>{
+  if(playing){ stop(); return; }
+  const a=ctx(); playing=true; nextStep=0; nextT=a.currentTime+0.08;
+  timer=setInterval(tick,25); $('play').textContent='■ Stop';
+};
+function stop(){ playing=false; clearInterval(timer); $('play').textContent='▶ Play'; }
+
+/* ---------- interaction ---------- */
+let drag=null;
+roll.addEventListener('mousedown', e=>{
+  const r=roll.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+  if(e.button===2){ eraseAt(sAt(x), pAt(y)); return; }
+  if(e.button!==0) return;
+  ctx(); // unlock audio on gesture
+  const s=sAt(x), p=pAt(y);
+  if(mode==='stamp'){
+    stampChord(s,p);
+  }else{
+    drag={s0:s,p0:p,s1:s,p1:p};
+  }
+});
+roll.addEventListener('mousemove', e=>{
+  if(!drag) return;
+  const r=roll.getBoundingClientRect();
+  drag.s1=sAt(e.clientX-r.left); drag.p1=pAt(e.clientY-r.top);
+  sel={...drag}; draw();
+});
+window.addEventListener('mouseup', ()=>{
+  if(!drag) return;
+  sel={s0:Math.min(drag.s0,drag.s1),s1:Math.max(drag.s0,drag.s1),p0:Math.min(drag.p0,drag.p1),p1:Math.max(drag.p0,drag.p1)};
+  drag=null; pickSel(); draw();
+});
+roll.addEventListener('contextmenu', e=>e.preventDefault());
+function pickSel(){
+  selected = new Set();
+  notes.forEach((n,i)=>{ if(n.p>=sel.p0&&n.p<=sel.p1&&n.s+n.len>sel.s0&&n.s<=sel.s1) selected.add(i); });
+}
+function eraseAt(step){
+  const before = notes.length;
+  notes = notes.filter(n=>n.s!==step);
+  if(notes.length!==before){ selected.clear(); draw(); }
+}
+/* stamp: root at clicked key, tones above within an octave+ */
+function stampChord(step,pitch){
+  const type=$('chordType').value;
+  if(type==='single'){
+    notes = notes.filter(n=>n.s!==step);
+    notes.push({p:pitch, s:step, len:4, vel:0.8});
+    pluck(pitch, ctx().currentTime+0.02, 0.6, 0.6);
+    draw(); return;
+  }
+  const ivs=CHORDS[type];
+  const pitches=ivs.map(v=>pitch+v);
+  const inv=Math.min(+$('inv').value||0, ivs.length-1); // a 2- or 3-note chord has fewer inversions
+  for(let i=0;i<inv;i++){ const li=pitches.indexOf(Math.min(...pitches)); pitches[li]+=12; } // stack rotation
+  notes = notes.filter(n=>n.s!==step); // one chord per step: dedupe, no pile-up
+  pitches.forEach((p,i)=>{ notes.push({p, s:step, len:4, vel:i===0?0.8:0.7, root:pitch}); });
+  playChord(pitches);
+  draw();
+}
+/* Tools · Chord verb */
+$('applyChord').onclick = ()=>{
+  if(selected.size===0){ flash('Select notes first (Select tool, drag a rectangle)'); return; }
+  const hv=$('chordVerb').value, sc=SCALES[scale()];
+  const atStep=new Map();
+  notes.forEach(n=>atStep.set(n.s,(atStep.get(n.s)||0)+1));
+  const roots=[...selected].map(i=>notes[i]).filter(n=>atStep.get(n.s)===1).sort((a,b)=>a.s-b.s);
+  if(roots.length===0){ flash('Selection has no single root notes'); return; }
+  const doneSteps=new Set(); let added=0;
+  for(const n of roots){
+    if(doneSteps.has(n.s)) continue; doneSteps.add(n.s);
+    let ivs;
+    if(hv==='diatonic'){
+      let d=0;
+      sc.forEach((semi,i)=>{ if((key()+semi)%12===n.p%12) d=i; });
+      const stack=diatonicChord(scale(), d, false);
+      ivs=stack.map(v=>v-stack[0]); // root-relative diatonic stack
+    }else ivs=CHORDS[hv];
+    ivs.forEach((v,i)=>{ if(i>0 && !notes.some(x=>x.p===n.p+v && x.s===n.s)){ notes.push({p:n.p+v,s:n.s,len:n.len,vel:n.vel*0.9}); added++; } });
+  }
+  selected.clear(); draw();
+  flash(`Harmonized ${doneSteps.size} root${doneSteps.size>1?'s':''}, added ${added} notes`);
+};
+/* Tools · Progression */
+$('reseed').onclick = ()=>{ $('seed').value = Math.floor(Math.random()*9999); };
+$('genProg').onclick = ()=>{
+  const tpl=$('prog').value, bars=+$('bars').value, seed=+$('seed').value, vl=$('vl').checked;
+  const rng=mulberry32(seed);
+  const sc=SCALES[scale()], n=sc.length;
+  let degs=[];
+  const dgTxt=$('degrees').value.trim();
+  if(dgTxt){ // explicit diatonic degree list — the CLI --degrees escape hatch
+    degs=dgTxt.split(/[:\s,]+/).map(x=>+x).filter(x=>Number.isInteger(x)&&x>=0&&x<n).slice(0,32);
+    if(!degs.length){ flash('No valid degrees (0–'+(n-1)+')'); return; }
+  }
+  else if(TEMPLATES[tpl]){ const t=TEMPLATES[tpl]; for(let b=0;b<bars;b++) degs.push(t[b%t.length]); }
+  else { let d=Math.floor(rng()*n); for(let b=0;b<bars;b++){ degs.push(d); d=(d+Math.floor(rng()*5)-2+n)%n; } }
+  const ivsOf = degs.map(d=>{ const st=diatonicChord(scale(), d, true); return st.map(v=>v-st[0]); });
+  let chords = degs.map((d,i)=> ivsOf[i].map(v=> 48 + ((key()+sc[d])%12) + v)); // roots stay in C3..B3
+  if(vl){
+    for(let i=1;i<chords.length;i++){
+      const prev=[...chords[i-1]].sort((a,b)=>a-b);
+      let best=null;
+      for(let r=0;r<chords[i].length;r++){
+        const cand=[...chords[i]];
+        for(let k=0;k<r;k++) cand[k]+=12; // lift lowest voices an octave (rotation)
+        const sorted=[...cand].sort((a,b)=>a-b);
+        const cost=sorted.reduce((acc,v,j)=>acc+Math.abs(v-prev[Math.min(j,prev.length-1)]),0);
+        if(!best||cost<best.cost) best={cand,cost};
+      }
+      chords[i]=best.cand;
+    }
+  }
+  notes=[];
+  chords.forEach((c,i)=>c.forEach(p=>notes.push({p, s:i*4, len:4, vel:0.75})));
+  draw();
+  playChord(chords[0], 1.4);
+};
+$('clear').onclick = ()=>{ notes=[]; selected.clear(); sel=null; draw(); };
+$('mStamp').onclick = ()=>{ mode='stamp'; $('mStamp').classList.add('on'); $('mSelect').classList.remove('on'); roll.style.cursor='crosshair'; };
+$('mSelect').onclick = ()=>{ mode='select'; $('mSelect').classList.add('on'); $('mStamp').classList.remove('on'); roll.style.cursor='cell'; };
+keyEl.onchange = scaleEl.onchange = draw;
+let flashT=null;
+function flash(msg){
+  let f=$('fl'); if(!f){ f=document.createElement('div'); f.id='fl';
+    Object.assign(f.style,{position:'fixed',left:'50%',bottom:'52px',transform:'translateX(-50%)',background:'#2a2e35',border:'1px solid var(--acc)',padding:'6px 14px',borderRadius:'5px',zIndex:9});
+    document.body.appendChild(f);} f.textContent=msg; f.style.opacity=1; clearTimeout(flashT); flashT=setTimeout(()=>f.style.opacity=0,2200);
+}
+window.addEventListener('keydown', e=>{
+  if(e.code==='Space'){ e.preventDefault(); $('play').click(); }
+  if(e.key==='Delete'){ notes=notes.filter((n,i)=>!selected.has(i)); selected.clear(); draw(); }
+});
+draw();
+$('genProg').click(); // seed the demo state so the roll is never empty on first open
+</script>
+</body>
+</html>
