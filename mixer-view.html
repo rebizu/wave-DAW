@@ -1,0 +1,530 @@
+<!doctype html>
+<!-- Visual prototype for upstream issue #48 "Separate view for mixer" — throwaway, not part of the app. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WAVE · issue #48 · separate mixer view</title>
+<style>
+:root{
+  --bg0:#0a0c0f;--bg1:#0e1013;--bg2:#111419;--bg3:#14181e;--bg4:#161a21;--bg5:#171b21;--bg6:#1c2128;--bg7:#1e242d;
+  --line:#252b34;--line2:#2c333d;--line3:#2e3641;
+  --fg:#d5dae2;--fg-hi:#f2f4f7;--fg2:#b4bac4;--fg3:#9aa2ad;--fg4:#7d8592;--fg5:#5c6573;--fg6:#4a5360;
+  --blue:#4f8ef7;--blue-hi:#8fb6ff;--green:#4ec08a;--amber:#e0a44a;--red:#e05263;
+  --sel-bg:#232a33;--sel-bg2:#1f252e;--sel-ring:#3a4554;--mixer-bg:#121519;
+  --playhead:#eef1f5;--shadow:rgba(0,0,0,.55);
+  --sans:system-ui,'Segoe UI',sans-serif;--mono:ui-monospace,'Cascadia Mono',monospace;
+}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg0);overflow:hidden;font-family:var(--sans);color:var(--fg)}
+button{font:inherit;cursor:pointer}
+
+/* ---------- proto chrome (mode bar + notes) ---------- */
+#modebar{height:42px;display:flex;align-items:center;gap:8px;padding:0 12px;background:#000;border-bottom:1px solid var(--line2);flex:none}
+#modebar .t{font:600 11px var(--sans);letter-spacing:.08em;color:var(--fg2);margin-right:8px;white-space:nowrap}
+.chip{height:26px;padding:0 12px;border:1px solid var(--line2);border-radius:13px;background:var(--bg2);color:var(--fg3);font:500 11px var(--sans);white-space:nowrap}
+.chip:hover{color:var(--fg-hi);border-color:var(--line3)}
+.chip.on{background:var(--sel-bg);border-color:var(--sel-ring);color:var(--blue-hi)}
+.chip b{font-weight:700;margin-right:4px}
+#notesbtn{margin-left:auto}
+#proto{display:flex;height:calc(100% - 42px)}
+#appwrap{flex:1;min-width:0;display:flex;flex-direction:column;padding:10px}
+#app{flex:1;min-height:0;display:flex;flex-direction:column;border:1px solid var(--line3);border-radius:8px;overflow:hidden;background:var(--bg1);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+#notes{width:300px;flex:none;border-left:1px solid var(--line2);background:var(--bg1);overflow:auto;padding:14px 16px 24px}
+body.nonotes #notes{display:none}
+#notes h2{margin:2px 0 8px;font:700 13px var(--sans);color:var(--fg-hi)}
+#notes h2 .n{color:var(--blue-hi)}
+#notes p{font:400 12px/1.55 var(--sans);color:var(--fg2);margin:6px 0}
+#notes .pf{margin:10px 0 0;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg2)}
+#notes .pf h3{margin:0 0 6px;font:600 10px var(--sans);letter-spacing:.1em;color:var(--fg4)}
+#notes .pf li{font:400 11.5px/1.5 var(--sans);color:var(--fg3);margin:4px 0}
+#notes ul{margin:0;padding-left:14px}
+#notes .try{margin-top:12px;padding:8px 12px;border-left:2px solid var(--blue);background:var(--bg2);font:400 11.5px/1.5 var(--sans);color:var(--fg2);border-radius:0 6px 6px 0}
+#notes .try b{color:var(--blue-hi)}
+.protofoot{margin-top:16px;font:400 10px var(--sans);color:var(--fg5)}
+
+/* ---------- fake WAVE toolbar ---------- */
+#toolbar{height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 10px;background:var(--bg3);border-bottom:1px solid var(--bg0)}
+#toolbar .logo{font:800 13px var(--sans);letter-spacing:.14em;color:var(--fg-hi);padding:0 6px}
+.tb{height:28px;min-width:28px;border:1px solid var(--line);border-radius:4px;background:var(--bg1);color:var(--fg2);display:flex;align-items:center;justify-content:center;padding:0 8px;font:500 11px var(--sans)}
+.tb:hover{background:var(--line);color:var(--fg-hi)}
+.tb.rec.on{color:var(--red);border-color:var(--red)}
+.tb.play.on{color:var(--green);border-color:var(--green)}
+.tbmenu{border:0;background:transparent;color:var(--fg3);font:500 11px var(--sans);padding:4px 6px;border-radius:4px}
+.tbmenu:hover{background:var(--line);color:var(--fg-hi)}
+#clock{margin-left:auto;font:600 12px var(--mono);color:var(--fg2);background:var(--bg1);border:1px solid var(--line);border-radius:4px;padding:4px 10px}
+#master{width:70px;height:6px;border-radius:1px;background:linear-gradient(90deg,#3f9e72,#4ec08a 62%,#f0c25a 88%,#e05263 97%);position:relative;overflow:hidden}
+#master i{position:absolute;inset:0;background:var(--bg0);transform-origin:left}
+
+/* ---------- stage: playlist + floating windows ---------- */
+#stage{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg1)}
+#playlist{position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,var(--bg2) 0 1px,transparent 1px 46px),
+  repeating-linear-gradient(180deg,transparent 0 27px,var(--bg2) 27px 28px),
+  var(--bg1)}
+.trk{position:absolute;left:0;right:0;height:56px;border-bottom:1px solid var(--bg2)}
+.trk .nm{position:sticky;left:0;float:left;width:92px;height:100%;font:600 10px var(--sans);color:var(--fg3);padding:4px 6px;border-right:1px solid var(--bg2);background:var(--bg1)}
+.clp{position:absolute;top:4px;height:48px;border-radius:3px;font:600 9px var(--sans);color:var(--fg-hi);padding:3px 5px;overflow:hidden;white-space:nowrap;border:1px solid rgba(0,0,0,.35)}
+#ph{position:absolute;top:0;bottom:0;width:2px;background:var(--playhead);opacity:.85}
+
+/* ---------- window chrome ---------- */
+.win{position:absolute;display:flex;flex-direction:column;background:var(--bg4);border:1px solid var(--line3);border-radius:6px;box-shadow:0 18px 48px var(--shadow);overflow:hidden}
+.winhd{height:30px;flex:none;display:flex;align-items:center;gap:8px;padding:0 6px 0 10px;background:var(--bg6);border-bottom:1px solid var(--bg0);cursor:grab;user-select:none}
+.winhd:active{cursor:grabbing}
+.winhd .title{font:600 12px var(--sans);color:var(--fg-hi);white-space:nowrap}
+.winhd .sub{min-width:0;font:500 11px var(--sans);color:var(--fg4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.winhd button{width:24px;height:20px;border:0;border-radius:3px;background:transparent;color:var(--fg3);display:flex;align-items:center;justify-content:center;font-size:14px;padding:0}
+.winhd button:hover{background:var(--line);color:var(--fg-hi)}
+.winhd .pin{font-size:12px}
+.winhd .pin.on{color:var(--blue-hi);background:var(--sel-bg)}
+.winbd{flex:1;min-height:0;position:relative;display:flex}
+.rsz{position:absolute;right:0;bottom:0;width:14px;height:14px;cursor:nwse-resize}
+.rsz::after{content:'';position:absolute;right:3px;bottom:3px;width:7px;height:7px;border-right:2px solid var(--fg6);border-bottom:2px solid var(--fg6)}
+
+/* channel rack */
+.rack{flex:1;padding:8px;overflow:auto}
+.rack .row{display:flex;align-items:center;gap:6px;height:26px;margin-bottom:3px}
+.rack .ch{width:88px;flex:none;height:22px;border:1px solid var(--line);border-radius:3px;background:var(--bg2);font:600 10px var(--sans);color:var(--fg2);display:flex;align-items:center;padding:0 6px}
+.rack .st{width:16px;height:20px;flex:none;border:1px solid var(--line);border-radius:3px;background:var(--bg1)}
+.rack .st.on{background:var(--blue);border-color:var(--blue)}
+.rack .st.g.on{background:var(--green);border-color:var(--green)}
+
+/* piano roll */
+.roll{flex:1;background:
+  repeating-linear-gradient(180deg,transparent 0 13px,var(--bg2) 13px 14px),
+  repeating-linear-gradient(90deg,var(--bg2) 0 1px,transparent 1px 28px),var(--bg1);position:relative}
+.roll .nt{position:absolute;height:10px;border-radius:2px;background:var(--blue-hi);border:1px solid rgba(0,0,0,.4)}
+.roll .nt.o{background:var(--amber)}
+
+/* plugin window */
+.plugbd{flex:1;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--bg2)}
+.plugbd .kn{display:flex;align-items:center;gap:10px;font:500 11px var(--sans);color:var(--fg3)}
+.kdial{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 220deg,var(--blue) 0 200deg,var(--knob, #2c333d) 200deg 360deg);border:1px solid var(--line3)}
+
+/* ---------- window bar (taskbar) ---------- */
+#winbar{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border:1px solid var(--line3);border-radius:8px;background:color-mix(in srgb,var(--bg6) 88%,transparent);backdrop-filter:blur(6px);box-shadow:0 8px 24px var(--shadow);z-index:900}
+#winbar button{height:24px;padding:0 10px;border:1px solid var(--line);border-radius:5px;background:var(--bg4);color:var(--fg3);font:600 10.5px var(--sans);display:flex;align-items:center;gap:6px}
+#winbar button:hover{color:var(--fg-hi);border-color:var(--line3)}
+#winbar button .dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+#winbar button.hid{opacity:.45}
+#winbar button.hid .dot{background:var(--fg6)}
+#winbar button.cur{background:var(--sel-bg);color:var(--blue-hi);border-color:var(--sel-ring)}
+body:not([data-mode="3"]) body, body[data-mode="1"] #winbar, body[data-mode="2"] #winbar{display:none}
+
+/* ---------- docked mixer ---------- */
+#dock{flex:none;display:none}
+body[data-mode="1"] #dock{display:block}
+#dock .mixbar{height:26px;display:flex;align-items:center;gap:10px;padding:0 4px 0 10px;background:var(--bg5);border-top:1px solid var(--line2);border-bottom:1px solid var(--bg0)}
+.mixbar .t{font:600 10px var(--sans);letter-spacing:.12em;color:var(--fg3)}
+.mixbar .cnt{font:500 10px var(--mono);color:var(--fg5)}
+.mixbar button{width:24px;height:20px;border:0;border-radius:3px;background:transparent;color:var(--fg3);font-size:14px}
+.mixbar button:hover{background:var(--line);color:var(--fg-hi)}
+
+/* ---------- mixer (shared by dock + floating window) ---------- */
+.mixer{flex:1;display:flex;background:var(--mixer-bg);min-height:0}
+.strips{flex:1;min-width:0;display:flex;overflow-x:auto;overflow-y:hidden}
+.strip{width:80px;flex:none;display:flex;flex-direction:column;gap:6px;padding:0 6px 8px;background:var(--bg4);border-right:1px solid var(--bg0);min-height:0}
+.strip.on{background:var(--sel-bg2);box-shadow:inset 0 0 0 1px var(--sel-ring)}
+.strip .cbar{height:3px;margin:0 -6px;flex:none}
+.strip .nm{height:16px;font:600 10px var(--sans);white-space:nowrap;overflow:hidden;text-align:center;flex:none}
+.strip .nm .mi{font-size:9px;margin-right:2px}
+.strip .kb{display:flex;justify-content:center;gap:8px;flex:none}
+.k3{display:flex;flex-direction:column;align-items:center;gap:1px}
+.pd{width:26px;height:26px;border-radius:50%;position:relative;border:1px solid var(--line2);background:var(--bg3)}
+.pd::before{content:'';position:absolute;left:50%;top:50%;width:8px;height:2px;margin:-1px 0 0 -4px;border-radius:1px;background:var(--fg-hi);transform:rotate(var(--a,0deg)) translateX(6px)}
+.pd svg{position:absolute;inset:0}
+.pd .arc{fill:none;stroke-width:2.5;stroke-linecap:round;transform:rotate(135deg);transform-origin:center}
+.k3 span{font:500 9px var(--mono);color:var(--fg4)}
+.ms{display:flex;justify-content:center;gap:3px;flex:none}
+.ms button{width:20px;height:16px;border:1px solid var(--line);border-radius:3px;background:var(--bg2);color:var(--fg4);font:700 9px var(--sans);padding:0}
+.ms button.m.on{background:var(--amber);border-color:var(--amber);color:#1a1206}
+.ms button.s.on{background:var(--blue);border-color:var(--blue);color:#0b1220}
+.fadewrap{flex:1;min-height:44px;display:flex;justify-content:center;gap:3px}
+.meter{position:relative;width:4px;border-radius:1px;overflow:hidden;background:linear-gradient(0deg,#3f9e72,#4ec08a 62%,#f0c25a 88%,#e05263 97%)}
+.meter i{position:absolute;left:0;right:0;top:0;height:100%;background:var(--bg0);transform-origin:top}
+.fader{position:relative;width:24px;margin-left:4px;cursor:ns-resize}
+.fader .fslot{position:absolute;left:11px;top:7px;bottom:7px;width:2px;background:var(--bg0);border-radius:1px}
+.fader .unity{position:absolute;left:3px;right:3px;height:1px;background:var(--fg6)}
+.fader .cap{position:absolute;left:2px;right:2px;height:12px}
+.fader .cap b{position:absolute;inset:1px;border-radius:2px;background:linear-gradient(180deg,#e8ebef,#b9bfc9);border:1px solid #6a727e}
+.strip .db{font:500 9px var(--mono);color:var(--fg3);text-align:center;flex:none}
+.strip .rt{font:400 8.5px var(--sans);color:var(--fg5);text-align:center;white-space:nowrap;overflow:hidden;flex:none}
+.addins{width:34px;flex:none;display:flex;align-items:flex-start;justify-content:center;padding-top:8px;background:var(--bg4);color:var(--blue);font:600 16px var(--sans)}
+.fxchain{width:300px;flex:none;display:flex;flex-direction:column;border-left:1px solid var(--bg0);background:var(--bg4);min-height:0}
+.fxchain .hd{height:28px;flex:none;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid var(--bg0)}
+.fxchain .hd .nm{flex:1;font:600 11px var(--sans);color:var(--fg-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fxchain .hd .rt{font:500 10px var(--mono);color:var(--fg5)}
+.slot{height:34px;flex:none;display:flex;align-items:center;gap:8px;padding:0 6px 0 8px;border-bottom:1px solid var(--bg1);cursor:pointer}
+.slot.on{background:var(--sel-bg2)}
+.slot .n{font:500 9px var(--mono);color:var(--fg5);width:12px;text-align:right}
+.slot .tile{width:22px;height:22px;flex:none;border-radius:4px;display:flex;align-items:center;justify-content:center;font:700 9px var(--sans);color:#10131a}
+.slot .fxn{flex:1;min-width:0;font:500 12px var(--sans);color:var(--fg-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slot .fxt{font:400 9px var(--mono);color:var(--fg4)}
+.slot .mk{width:18px;height:18px;border-radius:50%;position:relative;border:1px solid var(--line2);background:var(--bg3);flex:none}
+.slot .mk::before{content:'';position:absolute;left:50%;top:50%;width:6px;height:2px;margin:-1px 0 0 -3px;background:var(--fg-hi);transform:rotate(var(--a,0deg)) translateX(4px)}
+.slot .mx{font:500 9px var(--mono);color:var(--fg4);width:20px}
+.slot .led{width:10px;height:10px;border-radius:50%;background:var(--green);flex:none}
+.slot .led.off{background:var(--line2)}
+.slot .del{border:0;background:transparent;color:var(--fg5);font-size:13px;width:16px;height:20px}
+.slot.add .fxn{color:var(--blue)}
+.slot.add .tile{background:var(--bg6);color:var(--blue);border:1px dashed var(--line3)}
+
+/* floating mixer window size + exclusive mode */
+#mixwin{left:120px;top:56%;width:920px;height:250px}
+#mixwin.max{box-shadow:0 0 0 1px var(--sel-ring),0 18px 48px var(--shadow)}
+#mixwin.max .winhd{cursor:default}
+#mixwin.max .rsz{display:none}
+#mixbtn.on{color:var(--blue-hi);border-color:var(--blue)}
+#mixwin .mixbar{display:flex;align-items:center;gap:10px;padding:0 6px 0 0;height:auto;border:0}
+body[data-mode="3"] .hideme{display:none !important}
+#focusbanner{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:950;display:none;align-items:center;gap:8px;height:26px;padding:0 6px 0 12px;border:1px solid var(--sel-ring);border-radius:13px;background:var(--sel-bg);color:var(--blue-hi);font:600 11px var(--sans)}
+#focusbanner.on{display:flex}
+#focusbanner button{border:1px solid var(--line3);background:var(--bg4);color:var(--fg2);border-radius:10px;height:20px;padding:0 10px;font:500 10px var(--sans)}
+</style>
+</head>
+<body data-mode="1">
+<div id="modebar">
+  <span class="t">ISSUE #48 · SEPARATE MIXER VIEW</span>
+  <button class="chip on" data-m="1"><b>1</b> Docked — today</button>
+  <button class="chip" data-m="2"><b>2</b> Floating window (FL-style)</button>
+  <button class="chip" data-m="3"><b>3</b> Exclusive view (right-click)</button>
+  <button class="chip" data-m="4"><b>4</b> Float + pin + window bar ★</button>
+  <button class="chip" data-m="5"><b>5</b> Mix view — F9 swap ★★</button>
+  <button class="chip" id="notesbtn">Hide notes</button>
+</div>
+<div id="proto">
+  <div id="appwrap"><div id="app">
+    <div id="toolbar">
+      <span class="logo">WAVE</span>
+      <button class="tbmenu">File</button><button class="tbmenu">Edit</button>
+      <button class="tb play" id="playbtn" title="Play (space)">&#9654;</button>
+      <button class="tb" title="Stop">&#9632;</button>
+      <button class="tb rec" title="Record">&#9679;</button>
+      <span class="tb" style="font-family:var(--mono)">140.0</span>
+      <span class="tb" style="padding:0"><button class="tbmenu on" style="color:var(--blue-hi)">PAT</button><button class="tbmenu">SONG</button></span>
+      <span id="clock">00:00:00.0</span>
+      <div id="master"><i></i></div>
+      <button class="tb" id="mixbtn" title="Mix view (F9): swap the workspace to the mixer and back">MIX · F9</button>
+      <button class="tb" id="oknabtn" title="Windows menu">Okna &#9662;</button>
+    </div>
+    <div id="stage">
+      <div id="playlist">
+        <div class="trk" style="top:0"><span class="nm">Drums</span></div>
+        <div class="trk" style="top:56px"><span class="nm">Bass</span></div>
+        <div class="trk" style="top:112px"><span class="nm">Vox</span></div>
+        <div class="trk" style="top:168px"><span class="nm">Synth</span></div>
+        <div class="trk" style="top:224px"><span class="nm">FX</span></div>
+        <div class="clp" style="left:100px;top:4px;width:180px;background:#4f8ef7">Drums · verse</div>
+        <div class="clp" style="left:290px;top:4px;width:210px;background:#4f8ef7">Drums · hook</div>
+        <div class="clp" style="left:100px;top:60px;width:240px;background:#4ec08a">Bass</div>
+        <div class="clp" style="left:350px;top:60px;width:150px;background:#4ec08a">Bass fill</div>
+        <div class="clp" style="left:290px;top:116px;width:250px;background:#e0a44a">Vox 8 bars</div>
+        <div class="clp" style="left:100px;top:172px;width:400px;background:#9a6ff0">Pads</div>
+        <div class="clp" style="left:510px;top:228px;width:120px;background:#e05263">Riser</div>
+        <div id="ph" style="left:100px"></div>
+      </div>
+
+      <!-- floating windows -->
+      <div class="win" id="rackwin" style="left:36px;top:18px;width:440px;height:210px;z-index:10">
+        <div class="winhd"><span class="title">Channel rack</span><span class="sub">Pattern 1</span><span style="flex:1"></span><button data-close="rackwin">×</button></div>
+        <div class="winbd"><div class="rack" id="rackbd"></div></div>
+      </div>
+      <div class="win" id="rollwin" style="left:560px;top:14px;width:520px;height:240px;z-index:11">
+        <div class="winhd"><span class="title">Piano roll</span><span class="sub">Vox</span><span style="flex:1"></span><button data-close="rollwin">×</button></div>
+        <div class="winbd"><div class="roll" id="rollbd"></div></div>
+      </div>
+      <div class="win" id="plugwin" style="left:1000px;top:30px;width:240px;height:190px;z-index:12">
+        <div class="winhd"><span class="title">Fruity Delay 3</span><span class="sub">on Vox</span><span style="flex:1"></span><button data-close="plugwin">×</button></div>
+        <div class="winbd"><div class="plugbd">
+          <div class="kn"><span class="kdial"></span> Time 1/4<div style="flex:1"></div><span class="kdial" style="--knob:#2c333d"></span> Feedback 42%</div>
+          <div class="kn"><span class="kdial"></span> Cutoff 8.2k<div style="flex:1"></div><span class="kdial"></span> Mix 35%</div>
+        </div></div>
+      </div>
+
+      <!-- floating mixer window (modes 2/3/4) -->
+      <div class="win" id="mixwin" style="z-index:500">
+        <div class="winhd" id="mixhd">
+          <span class="title">Mixer</span><span class="sub" id="mixsub">8 inserts</span><span style="flex:1"></span>
+          <button class="pin" id="pinbtn" title="Keep on top (mode 4)">&#128204;</button>
+          <button id="focusbtn" title="Hide every floating window (mode 3)" style="display:none">Focus</button>
+          <button data-close="mixwin" id="mixclose" title="Close mixer">×</button>
+        </div>
+        <div class="winbd" id="mixbody" style="padding:0"></div>
+        <div class="rsz" id="mixrsz"></div>
+      </div>
+
+      <div id="winbar"></div>
+      <div id="focusbanner">Mixer focus — every other window hidden <button id="backbtn">Back to workspace (Esc)</button></div>
+    </div>
+
+    <!-- docked mixer (mode 1) -->
+    <div id="dock">
+      <div class="mixbar"><span class="t">MIXER</span><span class="cnt" id="dockcnt">8 inserts</span><span style="flex:1"></span><button title="Collapse">&#9660;</button><button title="Close">×</button></div>
+      <div class="mixer" id="dockbody" style="height:230px"></div>
+    </div>
+  </div></div>
+
+  <aside id="notes"></aside>
+</div>
+
+<script>
+'use strict';
+/* ---------- data ---------- */
+const INSERTS=[
+  {id:0,nm:'Master',col:'#8a93a3',vol:.82,pan:0,route:'output',fx:[{n:'Limiter',t:'LIM',c:'#4ec08a',mix:100,on:1},{n:'Maximizer',t:'MAX',c:'#4ec08a',mix:100,on:1}]},
+  {id:6,nm:'Kick',col:'#e05263',vol:.86,pan:0,route:'→ Master',fx:[{n:'Transient shaper',t:'TS',c:'#e0a44a',mix:64,on:1}]},
+  {id:7,nm:'Snare',col:'#e05263',vol:.74,pan:-12,route:'→ Master',fx:[{n:'Reverb',t:'REV',c:'#9a6ff0',mix:28,on:1}]},
+  {id:8,nm:'Hats',col:'#e05263',vol:.61,pan:22,route:'→ Master',fx:[]},
+  {id:9,nm:'Bass',col:'#4ec08a',vol:.78,pan:0,route:'→ Master',fx:[{n:'Saturator',t:'SAT',c:'#e0a44a',mix:41,on:1},{n:'EQ',t:'EQ',c:'#4f8ef7',mix:100,on:1}]},
+  {id:10,nm:'Vox',col:'#e0a44a',vol:.7,pan:-6,route:'→ Master',fx:[{n:'Fruity Delay 3',t:'VST3',c:'#4f8ef7',mix:35,on:1},{n:'Bus compressor',t:'CMP',c:'#4ec08a',mix:100,on:1},{n:'Reverb',t:'REV',c:'#9a6ff0',mix:22,on:0}]},
+  {id:11,nm:'Synth',col:'#9a6ff0',vol:.64,pan:14,route:'→ Master',fx:[]},
+  {id:12,nm:'FX bus',col:'#4f8ef7',vol:.5,pan:0,route:'→ Master',fx:[]},
+];
+const SEL=10; // selected strip: Vox
+
+/* ---------- build mixer content once, move it between dock & float ---------- */
+const mix=document.createElement('div');mix.className='mixer';
+{
+  const strips=document.createElement('div');strips.className='strips';
+  for(const m of INSERTS){
+    const on=m.id===SEL;
+    const s=document.createElement('div');s.className='strip'+(on?' on':'');
+    // 270° dial like the app's Mixer.tsx: viewBox 30, r=11, arc L=51.84 of C=69.12
+    const pd=(pan,color)=>{
+      const L=25.92*Math.abs(pan)/100, arr=pan>=0?`${L} 69.12`:`${L} 69.12`, off=pan<0?L:0;
+      return `<div class="k3"><div class="pd" style="--a:${pan*1.35}deg"><svg viewBox="0 0 30 30">
+        <circle cx="15" cy="15" r="11" fill="none" transform="rotate(135 15 15)" stroke="var(--knob-track)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="51.84 69.12"/>
+        <circle cx="15" cy="15" r="11" fill="none" transform="rotate(135 15 15)" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="${L} 69.12" stroke-dashoffset="${off}"/></svg></div>
+        <span>${pan>0?'R'+pan:pan<0?'L'+(-pan):'C'}</span></div>`;};
+    const db=(20*Math.log10(m.vol)).toFixed(1);
+    s.innerHTML=`<div class="cbar" style="background:${m.col}"></div>
+      <div class="nm" style="color:${m.col}">${m.id===0?'🎛 ':''}${m.nm}</div>
+      <div class="kb">${pd(m.pan,'#4f8ef7')}${pd(50,'#4ec08a')}</div>
+      <div class="ms"><button class="m">M</button>${m.id===0?'':'<button class="s">S</button>'}</div>
+      <div class="fadewrap"><div class="meter"><i></i></div><div class="meter"><i></i></div>
+        <div class="fader"><div class="fslot"></div><div class="unity" style="top:calc(0.2063 * (100% - 14px) + 7px)"></div><div class="cap" style="top:calc(${1-m.vol} * (100% - 14px))"><b></b></div></div></div>
+      <span class="db">${db} dB</span><span class="rt">${m.route}</span>`;
+    strips.appendChild(s);
+  }
+  strips.insertAdjacentHTML('beforeend','<div class="addins">+</div>');
+  mix.appendChild(strips);
+  const sel=INSERTS.find(v=>v.id===SEL);
+  const chain=document.createElement('div');chain.className='fxchain';
+  chain.innerHTML=`<div class="hd"><span style="width:8px;height:8px;border-radius:2px;background:${sel.col}"></span><span class="nm">${sel.nm}</span><span class="rt">→ Master</span></div>`;
+  const list=document.createElement('div');list.style.cssText='flex:1;min-height:0;overflow:auto';
+  sel.fx.forEach((f,i)=>{list.insertAdjacentHTML('beforeend',
+    `<div class="slot${i===0?' on':''}"><span class="n">${i+1}</span><span class="tile" style="background:${f.c}">${f.t.slice(0,3)}</span><span style="flex:1;min-width:0"><div class="fxn" style="${f.on?'':'color:var(--fg4)'}">${f.n}</div><div class="fxt">${f.t==='VST3'?'VST3':'internal'}${f.mix<100?' · mix '+f.mix+'%':''}</div></span><span class="mk" style="--a:${Math.round(f.mix*1.8-90)}deg"></span><span class="mx">${f.mix}</span><span class="led${f.on?'':' off'}"></span><button class="del">×</button></div>`);});
+  list.insertAdjacentHTML('beforeend','<div class="slot add"><span class="n">'+(sel.fx.length+1)+'</span><span class="tile">+</span><span class="fxn">Add effect</span></div>');
+  chain.appendChild(list);mix.appendChild(chain);
+}
+document.getElementById('dockbody').appendChild(mix);
+document.getElementById('dockcnt').textContent=(INSERTS.length-1)+' inserts';
+
+/* ---------- floating windows: drag / raise / close ---------- */
+const stage=document.getElementById('stage');
+let ztop=20;
+function raise(w){ if(w.id==='mixwin'&&document.body.dataset.mode==='4'&&pinned) {w.style.zIndex=500;return;} if(mixview&&w.id!=='mixwin'){w.style.zIndex=++zover;return;} w.style.zIndex=++ztop; }
+document.querySelectorAll('.win').forEach(w=>{
+  w.addEventListener('pointerdown',()=>raise(w),true);
+  const hd=w.querySelector('.winhd');
+  hd.addEventListener('pointerdown',e=>{
+    if(w.id==='mixwin'&&mixview)return;
+    if(e.target.closest('button')||e.button!==0)return;e.preventDefault();
+    const r=w.getBoundingClientRect(),sr=stage.getBoundingClientRect(),ox=e.clientX-r.left,oy=e.clientY-r.top;
+    const mv=ev=>{w.style.left=Math.max(-r.width+90,Math.min(ev.clientX-sr.left-ox,sr.width-40))+'px';
+                  w.style.top=Math.max(0,Math.min(ev.clientY-sr.top-oy,sr.height-34))+'px';};
+    const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);};
+    addEventListener('pointermove',mv);addEventListener('pointerup',up);
+  });
+});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-close]');if(b){const w=document.getElementById(b.dataset.close);w.style.display='none';syncWinbar();}});
+
+/* mixer float: resize */
+{
+  const w=document.getElementById('mixwin'),h=document.getElementById('mixrsz');
+  h.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();
+    const r=w.getBoundingClientRect();
+    const mv=ev=>{w.style.width=Math.max(560,ev.clientX-r.left)+'px';w.style.height=Math.max(150,ev.clientY-r.top)+'px';};
+    const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);};
+    addEventListener('pointermove',mv);addEventListener('pointerup',up);});
+}
+
+/* ---------- rack + roll content ---------- */
+{
+  const rows=[['Kick','#e05263',[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]],['Clap','#e05263',[0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0]],['Hat','#e05263',[1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0]],['Bass 808','#4ec08a',[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]],['Vox chop','#e0a44a',[0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0]]];
+  document.getElementById('rackbd').innerHTML=rows.map(([n,c,st])=>`<div class="row"><span class="ch" style="border-left:3px solid ${c}">${n}</span>${st.map((v,i)=>`<span class="st${v?' on':''}${i>7?' g':''}"></span>`).join('')}</div>`).join('');
+  const notes=[[0,5,2,.6],[2,5,3,.6],[5,3,1,.3],[6,7,2,.6],[9,5,1,.3],[10,3,4,.9],[14,2,1,.3],[15,5,2,.6],[18,0,3,.9],[22,3,2,.6],[24,5,4,.9],[28,7,1,.3],[29,8,2,.6],[32,10,2,.6],[35,8,2,.6],[38,7,2,.9]];
+  document.getElementById('rollbd').innerHTML=notes.map(([x,y,w,h])=>`<span class="nt${h>.7?' o':''}" style="left:${x*28}px;top:${(13-y)*14+2}px;width:${w*28-2}px;height:11px"></span>`).join('');
+}
+
+/* ---------- meters + transport ---------- */
+let playing=false,t0=performance.now(),clock=0;
+const meters=[...mix.querySelectorAll('.meter i')];
+const levels=meters.map((_,i)=>({ph:i*.7,sp:.6+Math.random()*1.4,base:.25+Math.random()*.45}));
+const vals=meters.map(()=>0);
+const masterI=document.querySelector('#master i');
+masterI.style.transform='scaleX(0.02)';
+document.getElementById('playbtn').addEventListener('click',()=>{playing=!playing;document.getElementById('playbtn').classList.toggle('on',playing);});
+function frame(now){
+  const dt=Math.min(.1,(now-t0)/1000);t0=now;
+  if(playing)clock+=dt;
+  meters.forEach((m,i)=>{
+    const L=levels[i];
+    const target=playing?Math.max(0,L.base+L.base*Math.sin(clock*3*L.sp+L.ph)+.12*Math.sin(clock*23*L.sp)):0;
+    vals[i]=target+(vals[i]-target)*(playing?.35:.10);
+    m.style.transform=`scaleY(${Math.max(0,Math.min(1,1-vals[i]))})`;});
+  masterI.style.transform=`scaleX(${playing?(.1+.08*Math.sin(clock*7)):0.02})`;
+  document.getElementById('clock').textContent=`${String(Math.floor(clock/60)).padStart(2,'0')}:${String(Math.floor(clock%60)).padStart(2,'0')}.${Math.floor(clock*10%10)}`;
+  if(playing)document.getElementById('ph').style.left=(100+((clock*46)%540))+'px';
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- window bar ---------- */
+const WINS=[['rackwin','Channel rack'],['rollwin','Piano roll'],['plugwin','Delay 3'],['mixwin','Mixer']];
+const winbar=document.getElementById('winbar');
+function syncWinbar(){
+  winbar.innerHTML='';
+  for(const[id,nm]of WINS){
+    const w=document.getElementById(id);
+    const b=document.createElement('button');
+    const hidden=w.style.display==='none'||w.classList.contains('hideme');
+    b.innerHTML=`<span class="dot"></span>${nm}`;
+    b.classList.toggle('hid',hidden);
+    b.addEventListener('click',()=>{w.style.display='flex';w.classList.remove('hideme');raise(w);syncWinbar();});
+    winbar.appendChild(b);
+  }
+}
+syncWinbar();
+
+/* ---------- exclusive (mode 3) ---------- */
+let solo=false;
+function enterSolo(){
+  if(document.body.dataset.mode!=='3')return;
+  solo=true;
+  ['rackwin','rollwin','plugwin'].forEach(id=>document.getElementById(id).classList.add('hideme'));
+  document.getElementById('focusbanner').classList.add('on');
+  syncWinbar();
+}
+function exitSolo(){
+  solo=false;
+  ['rackwin','rollwin','plugwin'].forEach(id=>document.getElementById(id).classList.remove('hideme'));
+  document.getElementById('focusbanner').classList.remove('on');
+  syncWinbar();
+}
+document.addEventListener('contextmenu',e=>{
+  const overMixer=e.target.closest('#mixwin')||(document.body.dataset.mode==='1'&&e.target.closest('#dock'));
+  if(!overMixer)return;
+  e.preventDefault();
+  if(document.body.dataset.mode==='3')solo?exitSolo():enterSolo();
+});
+document.getElementById('focusbtn').addEventListener('click',()=>enterSolo());
+document.getElementById('focusbanner').addEventListener('click',e=>{if(e.target.closest('button')){if(mixview)toggleMix();else exitSolo();}});
+addEventListener('keydown',e=>{if(e.key==='Escape')exitSolo();});
+/* FL-style: a plain click on the playlist hides floats; in mode 3 it also leaves the exclusive view */
+document.getElementById('playlist').addEventListener('pointerdown',()=>{if(solo)exitSolo();});
+
+/* ---------- pin (mode 4) ---------- */
+let pinned=false;
+document.getElementById('pinbtn').addEventListener('click',()=>{
+  pinned=!pinned;document.getElementById('pinbtn').classList.toggle('on',pinned);
+  document.getElementById('mixwin').style.zIndex=pinned?500:++ztop;
+});
+
+/* ---------- mix view (mode 5 / F9): swap the whole workspace, restore it untouched ---------- */
+const FLOATS=['rackwin','rollwin','plugwin'];
+let mixview=false,zover=500,prevMode=1,snap=null,mixSnap=null;
+function applyMax(){
+  const mw=document.getElementById('mixwin');
+  mw.style.left='12px';mw.style.top='10px';
+  mw.style.width=(stage.clientWidth-26)+'px';
+  mw.style.height=(stage.clientHeight-64)+'px';
+  mw.style.zIndex=400;
+}
+function enterMix(){
+  mixview=true;zover=500;
+  prevMode=+document.body.dataset.mode===5?4:+document.body.dataset.mode;
+  snap={};
+  snap[prevMode]=FLOATS.map(id=>{const s=document.getElementById(id).style;
+    return {id,l:s.left,t:s.top,w:s.width,h:s.height,d:s.display,z:s.zIndex};});
+  const mw=document.getElementById('mixwin');
+  mixSnap={l:mw.style.left,t:mw.style.top,w:mw.style.width,h:mw.style.height,z:mw.style.zIndex};
+  FLOATS.forEach(id=>document.getElementById(id).classList.add('hideme'));
+  mw.classList.add('max');applyMax();
+  document.getElementById('mixbtn').classList.add('on');
+  setMode(5); /* first: setMode's exitSolo() must not clobber the banner */
+  document.getElementById('focusbanner').innerHTML='Mix view — your arrange layout is saved behind F9 <button id="backbtn">Back to arrange (F9)</button>';
+  document.getElementById('focusbanner').classList.add('on');
+}
+function exitMix(){
+  if(!mixview)return;
+  mixview=false;
+  const mw=document.getElementById('mixwin');
+  mw.classList.remove('max');
+  Object.assign(mw.style,{left:mixSnap.l,top:mixSnap.t,width:mixSnap.w,height:mixSnap.h,zIndex:mixSnap.z});
+  (snap[prevMode]||[]).forEach(s=>{const w=document.getElementById(s.id);w.classList.remove('hideme');
+    Object.assign(w.style,{left:s.l,top:s.t,width:s.w,height:s.h,display:s.d,zIndex:s.z});});
+  document.getElementById('focusbanner').classList.remove('on');
+  document.getElementById('focusbanner').innerHTML='Mixer focus — every other window hidden <button id="backbtn">Back to workspace (Esc)</button>';
+  document.getElementById('mixbtn').classList.remove('on');
+  setMode(prevMode);
+  if(prevMode===3&&solo)document.getElementById('focusbanner').classList.add('on');
+}
+function toggleMix(){ mixview?exitMix():enterMix(); }
+document.getElementById('mixbtn').addEventListener('click',toggleMix);
+addEventListener('resize',()=>{if(mixview)applyMax();});
+addEventListener('keydown',e=>{
+  if(e.key==='F9'){e.preventDefault();toggleMix();return;}
+  if(e.key==='Escape'&&mixview){exitMix();return;}
+  const n=+e.key;if(n>=1&&n<=5&&!mixview&&document.activeElement===document.body)setMode(n);
+});
+
+/* ---------- notes per mode ---------- */
+const NOTES={
+ 1:{t:'1 · Docked panel — <span class="n">today</span>',p:'The mixer is a panel docked under the playlist, height adjustable by the splitter, collapsible to its bar. It can never be covered, and the strip + FX-chain layout is always reachable.',
+    good:['Nothing can cover it — the issue’s annoyance does not exist','Keeps the timeline visible above while mixing'],
+    bad:['Eats ~230 px of playlist/piano-roll height on every screen','No way to give it the whole screen or half the workspace','On a 13" laptop the faders get cramped']},
+ 2:{t:'2 · Floating window — <span class="n">FL-style</span>',p:'The mixer becomes a window like the Channel rack: drag it, resize it (bottom-right corner), park it anywhere. Same engine, same strips.',
+    good:['Full control of size and placement','Reads as “just another window” — consistent with rack/piano roll'],
+    bad:['<b>The annoyance from the issue:</b> click the rack or open a plugin and it lands on top of the mixer','No window bar today — you re-raise it via toolbar ▸ Okna only']},
+ 3:{t:'3 · Exclusive view — <span class="n">right-click hides everything</span>',p:'Right-click the mixer (or its new <b>Focus</b> button): every floating window hides and the mixer owns the workspace — a dedicated view, nothing can cover it. A slim <b>window bar</b> at the bottom keeps one-click restore; Esc, the banner, or a playlist click brings the workspace back.',
+    good:['The “annoying windows on top” problem is gone by design','Getting back is one click (window bar) — the issue’s worry solved','Feels like a real mixer screen on a second display'],
+    bad:['Context switch: you can’t see the timeline while mixing','Needs the window bar to exist, otherwise it strands you (the issue’s objection)']},
+ 4:{t:'4 · Float + pin + window bar — <span class="n">proposed hybrid ★</span>',p:'The mixer floats (mode 2) but gains two small affordances: a <b>pin</b> in its header (keep on top, like video players) and the same slim <b>window bar</b> for every window. Opening a plugin from a strip still raises that plugin above the mixer; unpin to work in the playlist again.',
+    good:['Fixes the overlap annoyance without forcing a full-screen switch','Window bar helps every window, not only the mixer','Progressive: pin only when you need it; docks nothing'],
+    bad:['Two new concepts (pin state, bar) to explain and keep consistent','“Always on top” within one OS window — plugin windows must respect it too','For sustained mixing passes the pin only wins visibility — mode 5 is the stronger tool']},
+ 5:{t:'5 · Mix view — <span class="n">F9 swaps the whole workspace ★★ (research pick)</span>',p:'One key turns the entire workspace into the mixer and back — the arrange layout is snapshotted and restored untouched. This is the pattern every strong DAW converged on: Bitwig’s F9 Mix View, Cubase’s F3 MixConsole, Logic’s X mixer pane, REAPER’s screensets, Live’s Tab. The docked mixer (mode 1) stays the tool for inline tweaks while arranging; F9 is for “I’m mixing now.”',
+    good:['Instant, symmetric context switch — one key each way','The overlap problem is gone by construction: nothing else exists in this view','Arrange comes back exactly as you left it — no pin, no z-order dance','Window bar stays as the safety net; a plugin opened from the FX chain floats above the mix view'],
+    bad:['One more key/screen to learn (mitigated: toolbar MIX chip + window bar)','A second layout to remember across sessions (persist like wave.layout)]']},
+};
+const notesEl=document.getElementById('notes');
+function setMode(m){
+  if(m===5&&!mixview){enterMix();return;}
+  document.body.dataset.mode=m;
+  document.querySelectorAll('#modebar .chip[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m==String(m)));
+  const N=NOTES[m];
+  notesEl.innerHTML=`<h2>${N.t}</h2><p>${N.p}</p>
+    <div class="pf"><h3>PROS</h3><ul>${N.good.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="pf" style="border-color:#4a2a33"><h3 style="color:#b0606f">TRADE-OFFS</h3><ul>${N.bad.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="try"><b>Try:</b> ${
+      m==1?'drag the mixer splitter feel via its bar; open the rack — the dock can’t be covered.':
+      m==2?'click the <b>Channel rack</b> header — it raises over the mixer. Then click the mixer header to bring it back (the FL dance).':
+      m==3?'<b>right-click</b> the mixer or press its <b>Focus</b> button — the workspace clears. Click a window-bar chip or Esc to return.':
+      m==5?'press <b>F9</b> (or the <b>MIX · F9</b> toolbar button): the workspace swaps to the mixer. Press F9 again — every window is back exactly where you left it. Open a plugin from the FX chain: it floats above the mix view.':
+      'toggle the <b>📌 pin</b> in the mixer header, then click the rack — the mixer stays on top. Unpin to let windows overlap normally.'}</div>
+    <p class="protofoot">Visual prototype for upstream issue #48 — throwaway mock, not wired to the engine.</p>`;
+  const body=m===1?document.getElementById('dockbody'):document.getElementById('mixbody');
+  body.appendChild(mix);
+  document.getElementById('mixwin').style.display=m===1?'none':'flex';
+  document.getElementById('focusbtn').style.display=m===3?'':'none';
+  document.getElementById('pinbtn').style.display=m===4?'':'none';
+  document.getElementById('oknabtn').style.opacity=m>=3?.35:1;
+  document.getElementById('oknabtn').title=m>=3?'Window bar replaces the Okna menu in this variant':'Windows menu';
+  document.getElementById('mixsub').textContent=INSERTS.length-1+' inserts'+(m===4&&pinned?' · pinned':m===5?' · mix view':'');
+  if(m!==3)exitSolo();
+  syncWinbar();
+}
+document.querySelectorAll('#modebar .chip[data-m]').forEach(b=>b.addEventListener('click',()=>{if(mixview&&+b.dataset.m!==5)toggleMix();setMode(+b.dataset.m);}));
+document.getElementById('notesbtn').addEventListener('click',()=>{document.body.classList.toggle('nonotes');document.getElementById('notesbtn').textContent=document.body.classList.contains('nonotes')?'Show notes':'Hide notes';});
+setMode(1);
+</script>
+</body>
+</html>
