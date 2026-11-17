@@ -11,6 +11,9 @@ export function PluginCrash() {
   const [suspects, setSuspects] = createSignal<PluginCrashSuspect[]>([]);
   const [blocked, setBlocked] = createSignal<string[]>([]);
   const [err, setErr] = createSignal('');
+  // the block list is per module (format + path), not per class: two installs of one plugin
+  // may share a cid but live in different bundles, and only the one the user blocked is gone
+  const moduleKey = (s: PluginCrashSuspect) => `${s.format}\u0000${s.path}`;
   onMount(async () => {
     try {
       const s = await be().pluginCrashSuspects();
@@ -22,7 +25,7 @@ export function PluginCrash() {
   const block = async (s: PluginCrashSuspect) => {
     try {
       await be().pluginBlock(s.format, s.path);
-      setBlocked(b => [...b, s.cid]);
+      setBlocked(b => [...b, moduleKey(s)]);
       say(t('d.pcrash.blocked', { name: s.name }));
     } catch (e) {
       setErr(String(e));
@@ -45,7 +48,7 @@ export function PluginCrash() {
                     <span class="missname" title={s.name}>{s.name}</span>
                     <span class="tag9">{s.format.toUpperCase()}</span>
                     <div style={{ flex: 1 }} />
-                    <Show when={!blocked().includes(s.cid)} fallback={<span class="note">{t('d.pcrash.isBlocked')}</span>}>
+                    <Show when={!blocked().includes(moduleKey(s))} fallback={<span class="note">{t('d.pcrash.isBlocked')}</span>}>
                       <button class="smallbtn" onClick={() => void block(s)} title={s.path}>{t('d.pcrash.block')}</button>
                     </Show>
                   </div>

@@ -487,7 +487,7 @@ function FileList(props: { k: string }) {
   });
   // the keyboard walk reads the model; a fresh list or a new open/search state rebuilds it
   createEffect(() => { flats[props.k] = flat(); bumpWalk(1); });
-  onCleanup(() => delete flats[props.k]);
+  onCleanup(() => { delete flats[props.k]; bumpWalk(1); }); // a list unmounting (its section closed) must retire its rows from the walk, not linger in it
   const slice = () => { const w = win(); return w ? w.f.slice(w.i0, w.i1 + 1) : []; };
   return (
     <div class="flist" ref={el}>
@@ -581,19 +581,23 @@ function LibraryTab() {
         <Show when={nothing()}><div class="bnote">{t('d.br.nomatch', { q: lib.q.trim() })}</div></Show>
         <Show when={searchTruncated()}><div class="bnote">{t('d.br.searchtrunc')}</div></Show>
         <Show when={stdShown()}>
-          <div class="bhead tog" role="button" aria-expanded={secOpen('std')} title={t('d.br.sec.tip')} onClick={() => toggleSec('std')}>
-            <Chev open={secOpen('std')} />
-            <span class="ell" style={{ 'text-transform': 'uppercase' }}>{t('d.br.stdlib')}</span>
-            <Show when={lib.files[STD]}>{f => <span class="hmeta">{searching() ? `${matchCount(STD)} / ${f().length}` : f().length}</span>}</Show>
+          <div class="bhead">
+            <button type="button" class="btog" aria-expanded={secOpen('std')} title={t('d.br.sec.tip')} onClick={() => toggleSec('std')} onKeyDown={e => e.stopPropagation()}>
+              <Chev open={secOpen('std')} />
+              <span class="ell" style={{ 'text-transform': 'uppercase' }}>{t('d.br.stdlib')}</span>
+              <Show when={lib.files[STD]}>{f => <span class="hmeta">{searching() ? `${matchCount(STD)} / ${f().length}` : f().length}</span>}</Show>
+            </button>
           </div>
           <Show when={secOpen('std')}>
             <div class="flist"><FileList k={STD} /></div>
           </Show>
         </Show>
         <Show when={kits().length}>
-          <div class="bhead top tog" role="button" aria-expanded={secOpen('kits')} title={t('d.br.sec.tip')} onClick={() => toggleSec('kits')}>
-            <Chev open={secOpen('kits')} />
-            <span class="ell">{t('d.br.kits')}</span>
+          <div class="bhead top">
+            <button type="button" class="btog" aria-expanded={secOpen('kits')} title={t('d.br.sec.tip')} onClick={() => toggleSec('kits')} onKeyDown={e => e.stopPropagation()}>
+              <Chev open={secOpen('kits')} />
+              <span class="ell">{t('d.br.kits')}</span>
+            </button>
           </div>
           <Show when={secOpen('kits')}>
           <For each={kits()}>
@@ -626,9 +630,11 @@ function LibraryTab() {
           </Show>
         </Show>
         <Show when={!searching() || folders().length}>
-          <div class="bhead top tog" role="button" aria-expanded={secOpen('folders')} title={t('d.br.sec.tip')} onClick={() => toggleSec('folders')}>
-            <Chev open={secOpen('folders')} />
-            <span class="ell">{t('d.br.folders')}</span>
+          <div class="bhead top">
+            <button type="button" class="btog" aria-expanded={secOpen('folders')} title={t('d.br.sec.tip')} onClick={() => toggleSec('folders')} onKeyDown={e => e.stopPropagation()}>
+              <Chev open={secOpen('folders')} />
+              <span class="ell">{t('d.br.folders')}</span>
+            </button>
             <button class="linkbtn" onClick={e => { e.stopPropagation(); void addFolder(); }} title={t('d.br.addfolder.tip')}>{t('d.br.add')}</button>
           </div>
           <Show when={secOpen('folders')}>

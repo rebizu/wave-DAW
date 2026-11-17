@@ -77,11 +77,12 @@ a { color: var(--blue); }
 .browser .scroll { flex: 1; min-height: 0; overflow: auto; }
 .bhead { height: 28px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; border-bottom: 1px solid var(--bg0); font: 600 10px var(--sans); letter-spacing: .12em; color: var(--fg4); }
 .bhead.top { border-top: 1px solid var(--bg0); }
-/* a Library section header toggles its whole section (a search opens the sections it matched) */
-.bhead.tog { gap: 6px; cursor: pointer; }
-.bhead.tog > .ell { flex: 1; min-width: 0; }
-.bhead.tog:hover { color: var(--fg2); }
-.bhead.tog:hover .chev { color: var(--fg-hi); }
+/* a Library section header holds a real toggle button: keyboard operable (Enter/Space fire
+   it natively), and its keys must not reach the list's Enter (= open the selected file) */
+.bhead > .btog { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; text-align: left; cursor: pointer; }
+.bhead > .btog > .ell { flex: 1; min-width: 0; }
+.bhead > .btog:hover { color: var(--fg2); }
+.bhead > .btog:hover .chev { color: var(--fg-hi); }
 .linkbtn { font: 500 11px var(--sans); letter-spacing: 0; color: var(--blue); cursor: pointer; background: none; border: 0; padding: 0; }
 .linkbtn:hover { color: var(--blue-hi); }
 .btabs { height: 30px; flex: none; display: flex; border-bottom: 1px solid var(--bg0); background: var(--bg5); }

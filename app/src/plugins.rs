@@ -158,6 +158,7 @@ pub struct CrashSuspect {
 }
 
 /// The file naming every live plugin; its absence or emptiness means a normal exit.
+#[cfg(not(test))]
 fn live_marker() -> Option<std::path::PathBuf> {
     wave_plugin_scan::data_file("live-plugins.json")
 }
@@ -236,7 +237,12 @@ impl PluginFactory for Factory {
 
 impl Plugins {
     pub fn new() -> Arc<Self> {
-        Arc::new(Self::open(live_marker()))
+        // Tests must not read or replace the user's marker (a running app's crash evidence).
+        #[cfg(test)]
+        let marker = None;
+        #[cfg(not(test))]
+        let marker = live_marker();
+        Arc::new(Self::open(marker))
     }
 
     /// Whatever the last session left in the marker file names its crash suspects; this
@@ -290,16 +296,39 @@ impl Plugins {
         self.crash_suspects.lock().clone()
     }
 
-    /// A clean exit: nothing is suspected any more.
-    pub fn clear_crash_suspects(&self) {
+    /// A clean exit: nothing is live (the instances are dropped with the engine), nothing
+    /// is suspected, and the marker file says so. An abnormal exit never reaches this, so
+    /// the next start still sees what was loaded.
+    pub fn session_ended(&self) {
+        let mut live = self.live.lock();
+        live.clear();
+        self.write_live(&live);
+        drop(live);
         self.crash_suspects.lock().clear();
     }
 
     /// Keep a plugin's module out of future scans (the user asked, after a crash).
     pub fn block(&self, format: &str, path: &str) -> Result<(), String> {
         let file = wave_plugin_scan::data_file(&format!("{format}-blocklist.txt")).ok_or("WAVE has no data folder for the block list")?;
-        wave_plugin_scan::BlockList::with_file(file).block(std::path::Path::new(path));
-        Ok(())
+        self.block_at(file, path)
+    }
+
+    /// The block list's whole read-modify-write, at an explicit file (the production one
+    /// comes from `data_file`). Every call reads the whole file and rewrites it, so the
+    /// calls are serialized: two overlapping requests would each write from a stale copy,
+    /// and the loser's entry would vanish.
+    fn block_at(&self, file: std::path::PathBuf, path: &str) -> Result<(), String> {
+        static BLOCK_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+        let _guard = BLOCK_LOCK.lock().unwrap_or_else(|e| e.into_inner());
+        let module = std::path::Path::new(path);
+        wave_plugin_scan::BlockList::with_file(&file).block(module);
+        // `BlockList::block` persists best-effort: confirm the entry really landed, or the
+        // UI would report a plugin as blocked that the next scan opens again.
+        if wave_plugin_scan::BlockList::with_file(&file).contains(module) {
+            Ok(())
+        } else {
+            Err(format!("could not write the block list ({}): {} stays scannable", file.display(), path))
+        }
     }
 
     pub fn factory(self: &Arc<Self>) -> Arc<dyn PluginFactory> {
@@ -491,8 +520,6 @@ mod tests {
         assert_eq!(plugins.crash_suspects(), vec![vitalium.clone()]);
         // this session starts clean: the marker no longer names anybody
         assert_eq!(read_marker_at(&marker), vec![]);
-        plugins.clear_crash_suspects();
-        assert!(plugins.crash_suspects().is_empty());
         // a live load lands in the marker, and its release takes it out again
         let p = PluginRef {
             format: PluginRef::VST3.into(),
@@ -506,20 +533,40 @@ mod tests {
         assert_eq!(read_marker_at(&marker), vec![vitalium.clone()]);
         plugins.live_released(7);
         assert_eq!(read_marker_at(&marker), vec![]);
+        // a normal exit empties the marker even while plugins are still live (the instances
+        // die with the process): the next start must suspect nobody
+        plugins.live_loaded(8, &p);
+        assert_eq!(read_marker_at(&marker), vec![vitalium.clone()]);
+        plugins.session_ended();
+        assert_eq!(read_marker_at(&marker), vec![]);
+        assert!(plugins.crash_suspects().is_empty());
         // a refused load (the factory's error path) never entered the marker
         std::fs::remove_dir_all(&dir).ok();
     }
 
+    /// A block-list write that could not land is reported, not pretended (the UI would say
+    /// "Blocked" while the next scan opens the plugin again).
     #[test]
-    fn block_writes_the_formats_block_list_for_future_scans() {
-        let dir = std::env::temp_dir().join(format!("wave-block-{}", std::process::id()));
+    fn block_reports_a_persistence_failure_instead_of_ok() {
+        let plugins = Plugins::open(None);
+        // a directory in the list's place: nothing can be written there
+        let dir = std::env::temp_dir().join(format!("wave-block-ro-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(dir.join("vst3-blocklist.txt")).unwrap();
+        let err = plugins.block_at(dir.join("vst3-blocklist.txt"), "/vst3/BadActor.vst3");
+        assert!(err.is_err(), "{err:?}");
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    #[test]
+    fn block_lands_in_the_list_and_survives_a_reload() {
+        let dir = std::env::temp_dir().join(format!("wave-block-ok-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
         std::fs::create_dir_all(&dir).unwrap();
-        let file = dir.join("vst3-blocklist.txt");
+        let plugins = Plugins::open(None);
+        plugins.block_at(dir.join("vst3-blocklist.txt"), "/vst3/BadActor.vst3").unwrap();
         let module = std::path::Path::new("/vst3/BadActor.vst3");
-        wave_plugin_scan::BlockList::with_file(&file).block(module);
-        let list = wave_plugin_scan::BlockList::with_file(&file);
-        assert!(list.contains(module));
+        assert!(wave_plugin_scan::BlockList::with_file(dir.join("vst3-blocklist.txt")).contains(module));
         std::fs::remove_dir_all(&dir).ok();
     }
 

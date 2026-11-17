@@ -295,8 +295,11 @@ pub(crate) fn set_always_on_top(hwnd: isize, pinned: bool) {
             0,
             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
         );
-        // the header's pin follows the state
-        let rect = RECT { left: 0, top: 0, right: 0, bottom: header_height(hwnd as HWND) };
+        // the header's pin follows the state (the client rect's top strip, as `set_state`
+        // repaints it: a zero-width rectangle would invalidate nothing)
+        let mut rect = RECT { left: 0, top: 0, right: 0, bottom: 0 };
+        GetClientRect(hwnd as HWND, &mut rect);
+        rect.bottom = header_height(hwnd as HWND);
         InvalidateRect(hwnd as HWND, &rect, 0);
     }
 }
@@ -513,7 +516,7 @@ unsafe fn dispatch(hwnd: HWND, message: u32, wparam: WPARAM, lparam: LPARAM) -> 
                 } as LRESULT);
             }
             Some(match part_at(hwnd, p.x, p.y) {
-                Some(Part::Settings | Part::Close) => HTCLIENT,
+                Some(Part::Pin | Part::Settings | Part::Close) => HTCLIENT,
                 _ => HTCAPTION,
             } as LRESULT)
         }
