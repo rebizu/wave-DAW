@@ -1,0 +1,2880 @@
+{
+  "format": "wave-project",
+  "project": {
+    "automations": [],
+    "bpm": 88.0,
+    "channels": [
+      {
+        "color": "#4f8ef7",
+        "id": 1012,
+        "insert": 4,
+        "kind": "synth",
+        "mute": false,
+        "name": "Warm Bass",
+        "pan": 0.0,
+        "root": 60,
+        "solo": false,
+        "synth": {
+          "params": {},
+          "preset": null
+        },
+        "vol": 0.7200000286102295
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 1015,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Kick",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 1014,
+        "vol": 0.8500000238418579
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 1017,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Snare",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 1016,
+        "vol": 0.75
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 1019,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Closed Hat",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 1018,
+        "vol": 0.4000000059604645
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 1021,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Open Hat",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 1020,
+        "vol": 0.5
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 4006,
+        "insert": 3,
+        "kind": "sample",
+        "mute": false,
+        "name": "Strings Tremolo",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 4005,
+        "vol": 0.6000000238418579
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 4009,
+        "insert": 2,
+        "kind": "sample",
+        "mute": false,
+        "name": "FM Piano",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 4008,
+        "vol": 0.41999998688697815
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 4011,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Side Stick",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 4010,
+        "vol": 0.699999988079071
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 4013,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Studio Crash",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 4012,
+        "vol": 0.699999988079071
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 4015,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Shaker",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 4014,
+        "vol": 0.44999998807907104
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 5009,
+        "insert": 2,
+        "kind": "sample",
+        "mute": false,
+        "name": "Harp",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 5008,
+        "vol": 0.5
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 5011,
+        "insert": 1,
+        "kind": "synth",
+        "mute": false,
+        "name": "Flute",
+        "pan": 0.0,
+        "root": 60,
+        "solo": false,
+        "synth": {
+          "params": {},
+          "preset": null
+        },
+        "vol": 0.8999999761581421
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 5013,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Frame Drum",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 5012,
+        "vol": 0.800000011920929
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 5015,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Frame Drum Muted",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 5014,
+        "vol": 0.6499999761581421
+      },
+      {
+        "color": "#4f8ef7",
+        "id": 5017,
+        "insert": 5,
+        "kind": "sample",
+        "mute": false,
+        "name": "Tambourine Hit",
+        "pan": 0.0,
+        "root": 60,
+        "sampler": {
+          "attack": 0.0,
+          "attackTension": 0.0,
+          "cut": 0,
+          "decay": 0.0,
+          "decayTension": 0.0,
+          "delay": 0.0,
+          "end": 1.0,
+          "env": false,
+          "fadeInMs": 0.0,
+          "fadeOutMs": 0.0,
+          "fine": 0.0,
+          "hold": 0.0,
+          "norm": false,
+          "release": 20.0,
+          "releaseTension": 0.0,
+          "reverse": false,
+          "semi": 0,
+          "start": 0.0,
+          "sustain": 1.0
+        },
+        "solo": false,
+        "source": 5016,
+        "vol": 0.5
+      }
+    ],
+    "clips": [
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7100,
+        "kind": "pat",
+        "len": 32.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 0.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7101,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 32.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7102,
+        "kind": "pat",
+        "len": 32.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 48.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7103,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7002,
+        "rev": false,
+        "start": 48.0,
+        "track": 1
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7104,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7002,
+        "rev": false,
+        "start": 64.0,
+        "track": 1
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7105,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 80.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7106,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7002,
+        "rev": false,
+        "start": 96.0,
+        "track": 1
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7107,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 112.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7108,
+        "kind": "pat",
+        "len": 32.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 128.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7109,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7002,
+        "rev": false,
+        "start": 128.0,
+        "track": 1
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7110,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7002,
+        "rev": false,
+        "start": 144.0,
+        "track": 1
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7111,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 160.0,
+        "track": 0
+      },
+      {
+        "fadeIn": 0.0,
+        "fadeOut": 0.0,
+        "gain": 0.0,
+        "id": 7112,
+        "kind": "pat",
+        "len": 16.0,
+        "muted": false,
+        "norm": false,
+        "offset": 0.0,
+        "pan": 0.0,
+        "ref": 7001,
+        "rev": false,
+        "start": 176.0,
+        "track": 0
+      }
+    ],
+    "comps": [],
+    "inserts": [
+      {
+        "color": "#d5dae2",
+        "fx": [
+          {
+            "bypass": false,
+            "id": 900,
+            "mix": 1.0,
+            "params": {
+              "auto": 1.0,
+              "ceil": -1.0,
+              "gain": 0.0,
+              "link": 100.0,
+              "look": 3.0,
+              "out": 0.0,
+              "rel": 80.0
+            },
+            "preset": 0,
+            "type": "limit"
+          }
+        ],
+        "id": 0,
+        "muted": false,
+        "name": "Master",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.7936999797821045,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [],
+        "id": 1,
+        "muted": false,
+        "name": "Lead",
+        "pan": 0.0,
+        "sends": [
+          {
+            "gain": 0.44999998807907104,
+            "to": 7
+          },
+          {
+            "gain": 0.3499999940395355,
+            "to": 8
+          }
+        ],
+        "solo": false,
+        "vol": 0.8999999761581421,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [],
+        "id": 2,
+        "muted": false,
+        "name": "Keys EP",
+        "pan": 0.0,
+        "sends": [
+          {
+            "gain": 0.4000000059604645,
+            "to": 7
+          }
+        ],
+        "solo": false,
+        "vol": 0.8500000238418579,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [],
+        "id": 3,
+        "muted": false,
+        "name": "Pad",
+        "pan": 0.0,
+        "sends": [
+          {
+            "gain": 0.550000011920929,
+            "to": 7
+          }
+        ],
+        "solo": false,
+        "vol": 0.699999988079071,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [],
+        "id": 4,
+        "muted": false,
+        "name": "Bass",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.8999999761581421,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [],
+        "id": 5,
+        "muted": false,
+        "name": "Drums",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.8500000238418579,
+        "width": 1.0
+      },
+      {
+        "color": "#d9678f",
+        "fx": [],
+        "id": 6,
+        "muted": false,
+        "name": "Insert 6",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.7936999797821045,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [
+          {
+            "bypass": false,
+            "id": 4001,
+            "mix": 1.0,
+            "params": {
+              "hi": 8000.0,
+              "lo": 300.0,
+              "mix": 100.0,
+              "pre": 20.0,
+              "size": 2.4,
+              "width": 100.0
+            },
+            "preset": null,
+            "type": "reverb"
+          }
+        ],
+        "id": 7,
+        "muted": false,
+        "name": "Reverb Bus",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.699999988079071,
+        "width": 1.0
+      },
+      {
+        "color": "#8b93a1",
+        "fx": [
+          {
+            "bypass": false,
+            "id": 4002,
+            "mix": 1.0,
+            "params": {
+              "beats": 0.75,
+              "cutoff": 4500.0,
+              "dry": 0.0,
+              "fb": 40.0,
+              "mix": 100.0,
+              "sync": 1.0
+            },
+            "preset": null,
+            "type": "delay"
+          }
+        ],
+        "id": 8,
+        "muted": false,
+        "name": "Delay Bus",
+        "pan": 0.0,
+        "solo": false,
+        "vol": 0.6000000238418579,
+        "width": 1.0
+      }
+    ],
+    "key": 9,
+    "loop": null,
+    "nextId": 7113,
+    "notebook": {
+      "pages": []
+    },
+    "patterns": [
+      {
+        "color": "#4ec08a",
+        "id": 7001,
+        "len": 32.0,
+        "minLen": 4.0,
+        "name": "Body",
+        "notes": [
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 0.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 8.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 4.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 12.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 2.0,
+            "v": 0.432383269071579
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 6.0,
+            "v": 0.41508492827415466
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 10.0,
+            "v": 0.4650934338569641
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 14.0,
+            "v": 0.40724363923072815
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 45,
+            "step": 0.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 45,
+            "step": 6.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 45,
+            "step": 10.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 2.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 2.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 64,
+            "step": 2.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 10.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 10.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 64,
+            "step": 10.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4006,
+            "len": 32.0,
+            "p": 57,
+            "step": 0.0,
+            "v": 0.30000001192092896
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 16.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 24.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 20.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 28.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 18.0,
+            "v": 0.45358818769454956
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 22.0,
+            "v": 0.43656888604164124
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 26.0,
+            "v": 0.40579989552497864
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 30.0,
+            "v": 0.45074358582496643
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 41,
+            "step": 16.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 41,
+            "step": 22.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 41,
+            "step": 26.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 53,
+            "step": 18.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 18.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 18.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 53,
+            "step": 26.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 26.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 26.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 32.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 40.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 36.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 44.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 34.0,
+            "v": 0.40374955534935
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 38.0,
+            "v": 0.44336456060409546
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 42.0,
+            "v": 0.4069855511188507
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 46.0,
+            "v": 0.40907129645347595
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 36,
+            "step": 32.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 36,
+            "step": 38.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 36,
+            "step": 42.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 48,
+            "step": 34.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 52,
+            "step": 34.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 34.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 48,
+            "step": 42.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 52,
+            "step": 42.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 42.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4006,
+            "len": 32.0,
+            "p": 48,
+            "step": 32.0,
+            "v": 0.30000001192092896
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 48.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 56.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 52.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 60.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 50.0,
+            "v": 0.44245192408561707
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 54.0,
+            "v": 0.4826852083206177
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 58.0,
+            "v": 0.412380188703537
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 62.0,
+            "v": 0.42232388257980347
+          },
+          {
+            "ch": 1021,
+            "len": 1.0,
+            "p": 46,
+            "step": 62.0,
+            "v": 0.44999998807907104
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 43,
+            "step": 48.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 43,
+            "step": 54.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 43,
+            "step": 58.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 50.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 59,
+            "step": 50.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 62,
+            "step": 50.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 58.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 59,
+            "step": 58.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 62,
+            "step": 58.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 64.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 72.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 68.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 76.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 66.0,
+            "v": 0.4627433121204376
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 70.0,
+            "v": 0.494770884513855
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 74.0,
+            "v": 0.45771029591560364
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 78.0,
+            "v": 0.43966805934906006
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 45,
+            "step": 64.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 45,
+            "step": 70.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 45,
+            "step": 74.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 66.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 66.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 64,
+            "step": 66.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 74.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 74.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 64,
+            "step": 74.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4006,
+            "len": 32.0,
+            "p": 57,
+            "step": 64.0,
+            "v": 0.30000001192092896
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 80.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 88.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 84.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 92.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 82.0,
+            "v": 0.4976254999637604
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 86.0,
+            "v": 0.4046582579612732
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 90.0,
+            "v": 0.4858468472957611
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 94.0,
+            "v": 0.428960919380188
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 41,
+            "step": 80.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 41,
+            "step": 86.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 41,
+            "step": 90.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 53,
+            "step": 82.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 82.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 82.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 53,
+            "step": 90.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 57,
+            "step": 90.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 60,
+            "step": 90.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 96.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 104.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 100.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 108.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 98.0,
+            "v": 0.4144255220890045
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 102.0,
+            "v": 0.4117792248725891
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 106.0,
+            "v": 0.4308481812477112
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 110.0,
+            "v": 0.4816126227378845
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 36,
+            "step": 96.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 36,
+            "step": 102.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 36,
+            "step": 106.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 48,
+            "step": 98.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 52,
+            "step": 98.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 98.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 48,
+            "step": 106.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 52,
+            "step": 106.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 106.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4006,
+            "len": 32.0,
+            "p": 48,
+            "step": 96.0,
+            "v": 0.30000001192092896
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 112.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1015,
+            "len": 1.0,
+            "p": 36,
+            "step": 120.0,
+            "v": 0.8999999761581421
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 116.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1017,
+            "len": 1.0,
+            "p": 38,
+            "step": 124.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 114.0,
+            "v": 0.4180726408958435
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 118.0,
+            "v": 0.45816001296043396
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 122.0,
+            "v": 0.4638913571834564
+          },
+          {
+            "ch": 1019,
+            "len": 1.0,
+            "p": 42,
+            "step": 126.0,
+            "v": 0.43723976612091064
+          },
+          {
+            "ch": 1021,
+            "len": 1.0,
+            "p": 46,
+            "step": 126.0,
+            "v": 0.44999998807907104
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 43,
+            "step": 112.0,
+            "v": 0.800000011920929
+          },
+          {
+            "ch": 1012,
+            "len": 2.0,
+            "p": 43,
+            "step": 118.0,
+            "v": 0.6200000047683716
+          },
+          {
+            "ch": 1012,
+            "len": 3.0,
+            "p": 43,
+            "step": 122.0,
+            "v": 0.7400000095367432
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 114.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 59,
+            "step": 114.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 62,
+            "step": 114.0,
+            "v": 0.5
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 55,
+            "step": 122.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 59,
+            "step": 122.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 2.0,
+            "p": 62,
+            "step": 122.0,
+            "v": 0.4399999976158142
+          }
+        ]
+      },
+      {
+        "color": "#e0a44a",
+        "id": 7002,
+        "len": 16.0,
+        "minLen": 4.0,
+        "name": "Lead",
+        "notes": [
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 0.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 1.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 2.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 3.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 72,
+            "step": 4.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 72,
+            "step": 5.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 6.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 7.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 8.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 9.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 10.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 11.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 12.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 13.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 72,
+            "step": 14.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 72,
+            "step": 15.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 0.0,
+            "v": 0.26381954550743103
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 2.0,
+            "v": 0.22502312064170837
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 4.0,
+            "v": 0.22476808726787567
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 6.0,
+            "v": 0.23647668957710266
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 8.0,
+            "v": 0.2744320034980774
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 10.0,
+            "v": 0.2542073726654053
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 12.0,
+            "v": 0.24513177573680878
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 14.0,
+            "v": 0.2668449580669403
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 53,
+            "step": 16.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 17.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 18.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 65,
+            "step": 19.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 20.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 21.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 65,
+            "step": 22.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 23.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 24.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 53,
+            "step": 25.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 53,
+            "step": 26.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 57,
+            "step": 27.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 28.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 65,
+            "step": 29.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 30.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 69,
+            "step": 31.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 16.0,
+            "v": 0.25625476241111755
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 18.0,
+            "v": 0.24398136138916016
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 20.0,
+            "v": 0.28355035185813904
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 22.0,
+            "v": 0.2759195566177368
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 24.0,
+            "v": 0.23952771723270416
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 26.0,
+            "v": 0.2659538984298706
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 28.0,
+            "v": 0.2620157301425934
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 30.0,
+            "v": 0.2900109887123108
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 48,
+            "step": 32.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 52,
+            "step": 33.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 34.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 35.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 36.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 37.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 38.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 39.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 52,
+            "step": 40.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 48,
+            "step": 41.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 48,
+            "step": 42.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 52,
+            "step": 43.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 44.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 60,
+            "step": 45.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 46.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 64,
+            "step": 47.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 32.0,
+            "v": 0.2783556282520294
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 34.0,
+            "v": 0.24303501844406128
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 36.0,
+            "v": 0.2984139919281006
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 38.0,
+            "v": 0.22944526374340057
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 40.0,
+            "v": 0.25344982743263245
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 42.0,
+            "v": 0.2805712819099426
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 44.0,
+            "v": 0.23215876519680023
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 46.0,
+            "v": 0.2591170370578766
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 48.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 59,
+            "step": 49.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 62,
+            "step": 50.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 67,
+            "step": 51.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 71,
+            "step": 52.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 71,
+            "step": 53.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 67,
+            "step": 54.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 62,
+            "step": 55.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 59,
+            "step": 56.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 57.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 55,
+            "step": 58.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 59,
+            "step": 59.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 62,
+            "step": 60.0,
+            "v": 0.4399999976158142
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 67,
+            "step": 61.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 71,
+            "step": 62.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4009,
+            "len": 1.0,
+            "p": 71,
+            "step": 63.0,
+            "v": 0.3400000035762787
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 48.0,
+            "v": 0.22313657402992249
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 50.0,
+            "v": 0.27345725893974304
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 52.0,
+            "v": 0.2811656594276428
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 54.0,
+            "v": 0.265842080116272
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 56.0,
+            "v": 0.29003822803497314
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 58.0,
+            "v": 0.24509979784488678
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 60.0,
+            "v": 0.275623619556427
+          },
+          {
+            "ch": 4015,
+            "len": 1.0,
+            "p": 38,
+            "step": 62.0,
+            "v": 0.267549604177475
+          }
+        ]
+      }
+    ],
+    "scale": 2,
+    "sources": [
+      {
+        "ch": 1,
+        "color": "#4f8ef7",
+        "dur": 0.3783,
+        "id": 1000,
+        "name": "808 Kick Short",
+        "path": "lib:Standard/kick-808-short.flac",
+        "peakDb": -1.0,
+        "sr": 44100
+      },
+      {
+        "ch": 1,
+        "color": "#d9678f",
+        "dur": 1.0,
+        "id": 1002,
+        "name": "808 Clap",
+        "path": "lib:Standard/clap-808.flac",
+        "peakDb": -1.0,
+        "sr": 44100
+      },
+      {
+        "ch": 1,
+        "color": "#e0a44a",
+        "dur": 0.1474,
+        "id": 1004,
+        "name": "808 Closed Hat",
+        "path": "lib:Standard/hat-808-closed.flac",
+        "peakDb": -1.0,
+        "sr": 44100
+      },
+      {
+        "ch": 1,
+        "color": "#d9678f",
+        "dur": 0.3007,
+        "id": 1006,
+        "name": "808 Snare",
+        "path": "lib:Standard/snare-808.flac",
+        "peakDb": -1.0,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#4f8ef7",
+        "dur": 0.9,
+        "id": 1014,
+        "name": "Studio Kick",
+        "path": "lib:Standard/kick-studio.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#d9678f",
+        "dur": 1.2,
+        "id": 1016,
+        "name": "Studio Snare",
+        "path": "lib:Standard/snare-studio.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#e0a44a",
+        "dur": 0.5,
+        "id": 1018,
+        "name": "Studio Closed Hat",
+        "path": "lib:Standard/hat-studio-closed.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#e0a44a",
+        "dur": 2.5,
+        "id": 1020,
+        "name": "Studio Open Hat",
+        "path": "lib:Standard/hat-studio-open.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#7c8cf8",
+        "dur": 4.0,
+        "id": 4003,
+        "name": "Vibraphone",
+        "path": "lib:Standard/vibraphone.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#c98a5a",
+        "dur": 3.0,
+        "id": 4005,
+        "name": "Strings Tremolo",
+        "path": "lib:Standard/strings-tremolo.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 1,
+        "color": "#7c8cf8",
+        "dur": 3.0,
+        "id": 4008,
+        "name": "FM Piano",
+        "path": "lib:Standard/fm-piano.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#d9678f",
+        "dur": 0.6,
+        "id": 4010,
+        "name": "Studio Side Stick",
+        "path": "lib:Standard/sidestick-studio.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#e0a44a",
+        "dur": 5.0,
+        "id": 4012,
+        "name": "Studio Crash",
+        "path": "lib:Standard/crash-studio.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#5fbf8a",
+        "dur": 0.6629478458049887,
+        "id": 4014,
+        "name": "Shaker",
+        "path": "lib:Standard/shaker.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#c98a5a",
+        "dur": 4.0,
+        "id": 5008,
+        "name": "Harp",
+        "path": "lib:Standard/harp.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#5fbf8a",
+        "dur": 1.5,
+        "id": 5012,
+        "name": "Frame Drum",
+        "path": "lib:Standard/frame-drum.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 2,
+        "color": "#5fbf8a",
+        "dur": 0.682108843537415,
+        "id": 5014,
+        "name": "Frame Drum Muted",
+        "path": "lib:Standard/frame-drum-muted.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      },
+      {
+        "ch": 1,
+        "color": "#5fbf8a",
+        "dur": 0.870702947845805,
+        "id": 5016,
+        "name": "Tambourine Hit",
+        "path": "lib:Standard/tambourine-hit.flac",
+        "peakDb": -1.0001518726348877,
+        "sr": 44100
+      }
+    ],
+    "tempoPoints": [
+      {
+        "beat": 0.0,
+        "bpm": 88.0,
+        "ramp": false
+      },
+      {
+        "beat": 32.0,
+        "bpm": 88.0,
+        "ramp": true
+      },
+      {
+        "beat": 48.0,
+        "bpm": 116.0,
+        "ramp": false
+      },
+      {
+        "beat": 80.0,
+        "bpm": 116.0,
+        "ramp": true
+      },
+      {
+        "beat": 96.0,
+        "bpm": 96.0,
+        "ramp": false
+      },
+      {
+        "beat": 112.0,
+        "bpm": 96.0,
+        "ramp": true
+      },
+      {
+        "beat": 128.0,
+        "bpm": 124.0,
+        "ramp": false
+      },
+      {
+        "beat": 160.0,
+        "bpm": 124.0,
+        "ramp": true
+      },
+      {
+        "beat": 176.0,
+        "bpm": 78.0,
+        "ramp": false
+      }
+    ],
+    "tracks": [
+      {
+        "arm": false,
+        "color": "#4f8ef7",
+        "h": 56.0,
+        "id": 1,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 1",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#e0a44a",
+        "h": 56.0,
+        "id": 2,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 2",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#7c8cf8",
+        "h": 56.0,
+        "id": 3,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 3",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#47b8a8",
+        "h": 56.0,
+        "id": 4,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 4",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#5fbf8a",
+        "h": 56.0,
+        "id": 5,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 5",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#d9678f",
+        "h": 56.0,
+        "id": 6,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 6",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#8b93a1",
+        "h": 56.0,
+        "id": 7,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 7",
+        "solo": false,
+        "vol": 0.7936999797821045
+      },
+      {
+        "arm": false,
+        "color": "#8b93a1",
+        "h": 56.0,
+        "id": 8,
+        "insert": 0,
+        "muted": false,
+        "name": "Track 8",
+        "solo": false,
+        "vol": 0.7936999797821045
+      }
+    ],
+    "version": 3
+  },
+  "version": 2
+}
